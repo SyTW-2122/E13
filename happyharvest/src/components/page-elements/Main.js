@@ -19,7 +19,7 @@ function Main() {
                 element: "crop",
                 type: "Tomate",
                 cycleTime: 24,
-                lastProduction: new Date,
+                lastProduction: new Date(),
                 icon: "https://image.flaticon.com/icons/png/512/1135/1135538.png"
             }}/>
         </div>
