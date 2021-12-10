@@ -36,3 +36,21 @@
     transform: rotate(360deg);
   }
 }
+
+.Login form {
+  background-color: grey;
+  padding: 20px;
+  
+}
+
+.Login form input {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.Login form button {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

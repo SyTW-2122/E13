@@ -1,5 +1,6 @@
 import React from "react";
 import FarmElement from "../FarmElement";
+import LoginForm from "./LoginForm";
 
 function Main() {
     let mainStyles = {
@@ -15,15 +16,18 @@ function Main() {
 
     return (
         <div style={mainStyles}>
-            <FarmElement props = {{
-                element: "crop",
-                type: "Tomate",
-                cycleTime: 24,
-                lastProduction: new Date(),
-                icon: "https://image.flaticon.com/icons/png/512/1135/1135538.png"
-            }}/>
+            <LoginForm />
         </div>
     );
 }
 
 export default Main; 
+
+/*
+<FarmElement props = {{
+                element: "crop",
+                type: "Tomate",
+                cycleTime: 24,
+                lastProduction: new Date(),
+                icon: "https://image.flaticon.com/icons/png/512/1135/1135538.png"
+            }}/>*/

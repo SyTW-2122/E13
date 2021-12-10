@@ -15,8 +15,6 @@ code {
 .Login {
   background-color: grey;
   padding: 20px;
-  width: 50%;
-  margin-left: 25%;
   
 }
 
@@ -24,22 +22,11 @@ code {
   display: block;
   margin-top: 20px;
   margin-bottom: 20px;
-  width: 50%;
-  margin-left: 25%;
 }
-.Login h2 {
-  display: block;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  width: 60%;
-  margin-left: 20%;
-  text-align: center;
-}
+
 .Login button {
   display: block;
   margin-top: 20px;
   margin-bottom: 20px;
-  width: 20%;
-  margin-left: 40%;
 }
 
