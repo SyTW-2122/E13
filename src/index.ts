@@ -5,11 +5,21 @@ const app = express();
 app.use(express.json());
 
 app.post("/users/auth", (req, res) => {
+  let user = "test";
+  let passwd = "test";
   try {
     let myObj:object = req.body;
-    res.send("");
+    if (!req.body.user || !req.body.passwd) {
+      throw new Error("User request must have user and passwd fields");
+    } else {
+      if ((req.body.user == user) && (req.body.passwd == passwd)) {
+        res.send("logged in!");
+      } else {
+        res.send("wrong user or password");
+      }
+    }
   } catch (err) {
-    res.send("request not valid:" + err);
+    res.status(400).send("request not valid:" + err);
   }
 });
 
