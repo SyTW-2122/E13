@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 function Header() {
     let styles = {
@@ -11,8 +12,8 @@ function Header() {
     return (
         <nav style= {styles}>
             <h1 style={{margin: "0px"}}>Welcome to HappyHarvest!</h1>
-            <a href="">Log in</a>
-            <a href="">Register</a>
+            <NavLink to="/signin">Entrar</NavLink>
+            <NavLink to="/signup">Registrarse</NavLink>
         </nav>
     );
 }

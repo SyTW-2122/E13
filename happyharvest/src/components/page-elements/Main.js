@@ -2,7 +2,7 @@ import React from "react";
 import FarmElement from "../FarmElement";
 import LoginForm from "./LoginForm";
 
-function Main() {
+function Main(props) {
     let mainStyles = {
         minHeight: "900px",
         marginTop: "5%",
@@ -16,7 +16,7 @@ function Main() {
 
     return (
         <div style={mainStyles}>
-            <LoginForm />
+            {props.children}
         </div>
     );
 }

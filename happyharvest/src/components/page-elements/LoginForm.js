@@ -1,4 +1,3 @@
-import { json } from "body-parser";
 import React from "react";
 import "../../index.css";
 
@@ -6,8 +5,8 @@ class LoginForm extends React.Component {
   constructor() {
     super();
     this.state = {
-      user : "",
-      passwd : "",
+      username : "",
+      password : "",
       logged: false,
       msg: ""
     };
@@ -36,8 +35,8 @@ class LoginForm extends React.Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        "user": this.state.user?String(this.state.user):"-",
-        "passwd": this.state.passwd?String(this.state.passwd):"-"
+        "username": this.state.username?String(this.state.username):"-",
+        "password": this.state.password?String(this.state.password):"-"
       })
     }
 
@@ -60,8 +59,8 @@ class LoginForm extends React.Component {
         <h1>{this.state.logged?"Logged In":"Logged Out"}</h1>
         <form className="Login">
           <h2>Introduzca sus datos:</h2>
-          <input type="text" placeholder="Usuario" name="user" onChange={this.handleChange}></input>
-          <input type="password" placeholder="Contraseña" name= "passwd" onChange={this.handleChange} onKeyPress={this.handleKeyPress}></input>
+          <input type="text" placeholder="Usuario" name="username" onChange={this.handleChange}></input>
+          <input type="password" placeholder="Contraseña" name= "password" onChange={this.handleChange} onKeyPress={this.handleKeyPress}></input>
           <button type="button" onClick={this.handleClick}>Enviar</button>
           <br></br>
           <p>{this.state.msg}</p>

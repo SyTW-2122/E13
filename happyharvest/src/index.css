@@ -27,6 +27,15 @@ code {
   width: 50%;
   margin-left: 25%;
 }
+
+.Login p {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 50%;
+  margin-left: 25%;
+}
+
 .Login h2 {
   display: block;
   margin-top: 20px;
