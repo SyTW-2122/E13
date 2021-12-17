@@ -41,7 +41,6 @@ class LoginForm extends React.Component {
     }
 
     let that = this;
-    this.setState((_) => {return {loading: true}})
     fetch("http://10.6.130.90/users/auth", requestOptions).then(response => response.json()).then((e) => {
         that.setState({
           logged: (e.logged == "true")?true:false,

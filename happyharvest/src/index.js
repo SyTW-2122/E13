@@ -14,7 +14,7 @@ ReactDOM.render(
   <Router>
     <Header />
     <Routes>
-      <Route path="/" element={<App />}></Route>
+      <Route path="/" element={<App />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
     </Routes>

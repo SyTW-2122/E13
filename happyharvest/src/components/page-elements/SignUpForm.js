@@ -1,5 +1,5 @@
 import React from "react";
-import { redirect } from "statuses";
+import { NavLink } from "react-router-dom";
 import "../../index.css";
 
 class SignUpForm extends React.Component {
@@ -10,7 +10,7 @@ class SignUpForm extends React.Component {
       password : "",
       email : "",
       passwordRepeat : "",
-      logged: false,
+      register: false,
       validUser : "",
       validPassword : "",
       validEmail : ""
@@ -75,21 +75,29 @@ class SignUpForm extends React.Component {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          "user": this.state.username?String(this.state.username):"-",
-          "passwd": this.state.password?String(this.state.password):"-"
+          "username": this.state.username?String(this.state.username):"-",
+          "password": this.state.password?String(this.state.password):"-",
+          "email": this.state.email?String(this.state.email):"-"
         })
       }
 
       let that = this;
-      this.setState((_) => {return {loading: true}})
-      /*fetch("http://10.6.130.90/users/auth", requestOptions).then(response => response.json()).then((e) => {
-          that.setState({
-            logged: (e.logged == "true")?true:false,
-            msg: String(e.msg)
-          })
+      fetch("http://10.6.130.90/users/auth", requestOptions).then(response => response.json()).then((e) => {
+          if(e.type == "res") {
+            that.setState((_) => {
+              return {
+                register: e.register,
+                validUser: e.validUser?e.validUser:"",
+                validPassword: e.validPassword?e.validPassword:"",
+                validEmail: e.validEmail?e.validEmail:""
+              }
+            });
+          } else {
+            alert(e.msg)
+          }
         }).catch((e)=> {
           alert(e);
-      });*/
+      });
     }
   }
 
@@ -97,26 +105,36 @@ class SignUpForm extends React.Component {
     let errStyle = {
       color: "red"
     }
-    return (
-      <div>
-        <h1>Registro</h1>
-        <form className="Login">
-          <h2>Introduzca sus datos:</h2>
-          <input type="text" placeholder="Usuario" name="username" onChange={this.handleChange} />
-          <p style={errStyle}>{this.state.validUser}</p>
-          <input type="text" placeholder="Correo electrónico" name= "email" onChange={this.handleChange}/>
-          <p style={errStyle}>{this.state.validEmail}</p>
-          <input type="password" placeholder="Contraseña" name= "password" onChange={this.handleChange}/>
-          <input type="password" placeholder="Repetir contraseña" name= "passwordRepeat" onChange={this.handleChange}/>
-          <p style={errStyle}>{this.state.validPassword}</p>
 
-          <button type="button" onClick={this.handleClick}>Registrarme</button>
-          <br></br>
-          <p>{this.state.msg}</p>
-        </form>
-      </div>
-      
-    );
+    if(!this.state.register) {
+      return (
+        <div>
+          <h1>Registro</h1>
+          <form className="Login">
+            <h2>Introduzca sus datos:</h2>
+            <input type="text" placeholder="Usuario" name="username" onChange={this.handleChange} />
+            <p style={errStyle}>{this.state.validUser}</p>
+            <input type="text" placeholder="Correo electrónico" name= "email" onChange={this.handleChange}/>
+            <p style={errStyle}>{this.state.validEmail}</p>
+            <input type="password" placeholder="Contraseña" name= "password" onChange={this.handleChange}/>
+            <input type="password" placeholder="Repetir contraseña" name= "passwordRepeat" onChange={this.handleChange}/>
+            <p style={errStyle}>{this.state.validPassword}</p>
+  
+            <button type="button" onClick={this.handleClick}>Registrarme</button>
+            <br></br>
+            <p>{this.state.msg}</p>
+          </form>
+        </div> 
+      );
+    } else {
+      return(
+        <div>
+          <h1>Usted ha sido registrado satisfactoriamente</h1>
+          <NavLink to="/signin"><button>Iniciar sesión</button></NavLink>
+        </div>     
+      );
+    }
+    
   }
 };
 
