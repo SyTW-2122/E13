@@ -6,7 +6,7 @@ const app = express();
 app.use(express.urlencoded());
 app.use(express.json());
 app.use(express.static(join(__dirname, '../happyharvest/build')));
-/*
+
 app.post("/users", (req, res) => {
   console.log(req.body);
   let existingUsers = ["test", "otheruser"];
@@ -41,7 +41,7 @@ app.post("/users", (req, res) => {
       msg: "Request not valid: " + err
     }));
   }
-});*/
+});
 
 app.post("/users/auth", (req, res) => {
   let user = "test";

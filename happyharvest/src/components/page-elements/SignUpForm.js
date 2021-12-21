@@ -82,10 +82,11 @@ class SignUpForm extends React.Component {
       }
 
       let that = this;
-      fetch("http://10.6.130.90/users/auth", requestOptions).then(response => response.json()).then((e) => {
+      fetch("http://10.6.130.90/users", requestOptions).then(response => response.json()).then((e) => {
+          console.log(e);
           if(e.type == "res") {
             that.setState((_) => {
-              return {
+              return { 
                 register: e.register,
                 validUser: e.validUser?e.validUser:"",
                 validPassword: e.validPassword?e.validPassword:"",
@@ -106,35 +107,31 @@ class SignUpForm extends React.Component {
       color: "red"
     }
 
-    if(!this.state.register) {
-      return (
-        <div>
-          <h1>Registro</h1>
-          <form className="Login">
-            <h2>Introduzca sus datos:</h2>
-            <input type="text" placeholder="Usuario" name="username" onChange={this.handleChange} />
-            <p style={errStyle}>{this.state.validUser}</p>
-            <input type="text" placeholder="Correo electrónico" name= "email" onChange={this.handleChange}/>
-            <p style={errStyle}>{this.state.validEmail}</p>
-            <input type="password" placeholder="Contraseña" name= "password" onChange={this.handleChange}/>
-            <input type="password" placeholder="Repetir contraseña" name= "passwordRepeat" onChange={this.handleChange}/>
-            <p style={errStyle}>{this.state.validPassword}</p>
-  
-            <button type="button" onClick={this.handleClick}>Registrarme</button>
-            <br></br>
-            <p>{this.state.msg}</p>
-          </form>
-        </div> 
-      );
-    } else {
-      return(
-        <div>
-          <h1>Usted ha sido registrado satisfactoriamente</h1>
-          <NavLink to="/signin"><button>Iniciar sesión</button></NavLink>
-        </div>     
-      );
-    }
-    
+    let content = <div>
+        <h1>Registro</h1>
+        <form className="Login">
+          <h2>Introduzca sus datos:</h2>
+          <input type="text" placeholder="Usuario" name="username" onChange={this.handleChange} />
+          <p style={errStyle}>{this.state.validUser}</p>
+          <input type="text" placeholder="Correo electrónico" name= "email" onChange={this.handleChange}/>
+          <p style={errStyle}>{this.state.validEmail}</p>
+          <input type="password" placeholder="Contraseña" name= "password" onChange={this.handleChange}/>
+          <input type="password" placeholder="Repetir contraseña" name= "passwordRepeat" onChange={this.handleChange}/>
+          <p style={errStyle}>{this.state.validPassword}</p>
+
+          <button type="button" onClick={this.handleClick}>Registrarme</button>
+          <br></br>
+          <p>{this.state.msg}</p>
+        </form>
+      </div>
+
+    let login = <div>
+        <h1>Usted ha sido registrado satisfactoriamente</h1>
+        <NavLink to="/signin"><button>Iniciar sesión</button></NavLink>
+      </div>
+    return (
+      this.state.register?login:content
+    );
   }
 };
 
