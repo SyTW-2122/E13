@@ -8,10 +8,50 @@ import Header from './components/page-elements/Header';
 import Footer from './components/page-elements/Footer';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
+import currentUserReducer from './reducers/current-user-reducer';
+import signUpReducer from './reducers/sign-up-reducer';
+import signInReducer from './reducers/sign-in-reducer';
+
+const allReducers = combineReducers({
+  currentUser: currentUserReducer,
+  signIn: signInReducer,
+  signUp: signUpReducer
+}); 
+
+const store = createStore(allReducers, {
+  currentUser: {
+    username : "",
+    fullname : "",
+    email : "",
+    registration : ""
+  },
+  signIn: {
+    username : "",
+    password : "",
+    msg: ""
+  },
+  signUp: {
+    username : "",
+    password : "",
+    email : "", 
+    passwordRepeat : "",
+    register: false,
+    validUser : "",
+    validPassword : "",
+    validEmail : ""
+  }
+},
+
+window.devToolsExtension && window.devToolsExtension()
+
+); 
 
 ReactDOM.render(
   //<React.StrictMode>
-  <Router>
+  <Provider store={store}>
+    <Router>
     <Header />
     <Routes>
       <Route path="/" element={<App />} />
@@ -19,9 +59,9 @@ ReactDOM.render(
       <Route path="/signup" element={<SignUp />} />
     </Routes>
     <Footer />
-  </Router>,
+    </Router>
+  </Provider>,
 
-  //</React.StrictMode>,
   document.getElementById('root')
 );
 

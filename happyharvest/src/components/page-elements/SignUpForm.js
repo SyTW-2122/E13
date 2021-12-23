@@ -84,7 +84,7 @@ class SignUpForm extends React.Component {
       let that = this;
       fetch("http://10.6.130.90/users", requestOptions).then(response => response.json()).then((e) => {
           console.log(e);
-          if(e.type == "res") {
+          if(e.type === "res") {
             that.setState((_) => {
               return { 
                 register: e.register,

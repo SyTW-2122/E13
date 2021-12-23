@@ -55,13 +55,17 @@ app.post("/users/auth", (req, res) => {
       if ((req.body.username == user) && (req.body.password == passwd)) {
         res.send(JSON.stringify({
           type: "res",
-          logged: "true",
+          status: "true",
+          username : "test",
+          fullname : "testUser",
+          email : "test@example.com",
+          registration : "20/11/21",
           msg: "User logged in"
         }));
       } else {
         res.send(JSON.stringify({
           type: "res",
-          logged: "false",
+          status: "false",
           msg: "Wrong user or password"
         }));
       }
