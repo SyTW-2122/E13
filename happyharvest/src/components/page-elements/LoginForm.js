@@ -57,11 +57,9 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    console.log(this.props);
-
     return (
       <div>
-        <h1>{this.props.currentUser.name === "" ? "Logged In" : "Logged Out"}</h1>
+        <h1>{this.props.currentUser.username === "" ? "Logged Out" : "Logged In"}</h1>
         <form className="Login">
           <h2>Introduzca sus datos:</h2>
           <input type="text" placeholder="Usuario" name="username" onChange={this.handleChange}></input>
