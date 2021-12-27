@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as jwt from 'jsonwebtoken';
 import {join} from 'path'
 
 const app = express();
@@ -7,28 +8,93 @@ app.use(express.urlencoded());
 app.use(express.json());
 app.use(express.static(join(__dirname, '../happyharvest/build')));
 
+const authSecret = 'aJDvksKOndi21FKDSasvbniopAD';
+const refreshSecret = 'knasdfklNVnDlvjmQEFfdscAJCdz';
+
+let generatedTokens = [];
+
+let users = [
+  {
+    username: "test", 
+    password: "test", 
+    email: "test@example.com", 
+    fullname: "TestUser", 
+    registration: "20/12/21",
+    "farmElements" : {
+   	 "cropSpaces" : 9,
+   	 "animalSpaces" : 3,
+   	 "currentCrops" : [],
+   	 "currentAnimals" : [],
+    },
+    "inventory" : {
+      "currentCash" : 1000,
+      "cropBoost" : 0,
+      "animalBoost" : 0,
+      "products" : []
+    }
+  },
+  {
+    username: "test2", 
+    password: "test2", 
+    email: "test2@example.subdomain.com", 
+    fullname: "TestUserTheSecond", 
+    registration: "10/12/21",
+    "farmElements" : {
+   	 "cropSpaces" : 9,
+   	 "animalSpaces" : 3,
+   	 "currentCrops" : [],
+   	 "currentAnimals" : [],
+    },  
+    "inventory" : {
+      "currentCash" : "1000",
+      "cropBoost" : "0",
+      "animalBoost" : "0",
+      "products" : []
+    }
+  }
+]
+
 app.post("/users", (req, res) => {
   console.log(req.body);
-  let existingUsers = ["test", "otheruser"];
-  let existingEmails = ["test@example.com", "otheruser@example.other.com"];
   try {
-    let myObj:object = req.body;
     if (!req.body.username || !req.body.password || !req.body.email) {
-      throw new Error("User request must have username and password fields");
+      throw new Error("User request must have username, email and password fields");
     } else {
-      if (existingUsers.indexOf(req.body.username) !== -1) {
+      
+      let user = users.find((u) => {return u.username === req.body.username});
+      let email = users.find((u) => {return u.email === req.body.email});
+      if (user) {
         res.send(JSON.stringify({
           type: "res",
           register: "false",
           validUser: "El usuario ya existe"
         }));
-      } else if (existingEmails.indexOf(req.body.email) !== -1) {
+      } else if (email) {
         res.send(JSON.stringify({
           type: "res",
           register: "false",
           validEmail: "Usted ya posee una cuenta asociada a este correo"
         }));
       } else {
+        users.push({
+          username: req.body.username, 
+          password: req.body.password, 
+          email: req.body.email, 
+          fullname: req.body.username, 
+          registration: new Date().toDateString(),
+          "farmElements" : {
+            "cropSpaces" : 9,
+            "animalSpaces" : 3,
+            "currentCrops" : [],
+            "currentAnimals" : [],
+          },
+          "inventory" : {
+            "currentCash" : 1000,
+            "cropBoost" : 0,
+            "animalBoost" : 0,
+            "products" : []
+          }
+        });
         res.send(JSON.stringify({
           type: "res",
           register: "true"
@@ -44,22 +110,23 @@ app.post("/users", (req, res) => {
 });
 
 app.post("/users/auth", (req, res) => {
-  let user = "test";
-  let passwd = "test";
-  console.log(req.body);
   try {
-    let myObj:object = req.body;
+    
     if (!req.body.username || !req.body.password) {
       throw new Error("User request must have username and password fields");
     } else {
-      if ((req.body.username == user) && (req.body.password == passwd)) {
+      
+      let user = users.find((u) => {return u.username === req.body.username && u.password === req.body.password});
+      if (user) {
+        let token = jwt.sign({username: user.username}, authSecret);
         res.send(JSON.stringify({
           type: "res",
           status: "true",
-          username : "test",
-          fullname : "testUser",
-          email : "test@example.com",
-          registration : "20/11/21",
+          username : user.username,
+          fullname : user.fullname,
+          email : user.email,
+          registration : user.registration,
+          accessToken : token,
           msg: "User logged in"
         }));
       } else {
