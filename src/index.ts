@@ -9,9 +9,39 @@ app.use(express.json());
 app.use(express.static(join(__dirname, '../happyharvest/build')));
 
 const authSecret = 'aJDvksKOndi21FKDSasvbniopAD';
-const refreshSecret = 'knasdfklNVnDlvjmQEFfdscAJCdz';
 
-let generatedTokens = [];
+function cleanPassword(obj:any) {
+  let aux:any = {...obj};
+  delete aux.password;
+  return aux;
+
+}
+
+const authenticate = (req:any, res:any, next:any) => {
+  const authHeader = req.headers.authorization;
+
+  if (authHeader) {
+      const token = authHeader.split(' ')[1];
+
+      jwt.verify(token, authSecret, (err:any, authinfo:any) => {
+          if (err) {
+              return res.status(403).send({
+                type: "err",
+                msg: "Token could not be verified"
+              });
+          }
+
+          
+          req.body.authinfo = authinfo;
+          next();
+      });
+  } else {
+      res.status(401).send({
+        type: "err",
+        msg: "Auth token must be provided"
+      });
+  }
+}
 
 let users = [
   {
@@ -118,7 +148,7 @@ app.post("/users/auth", (req, res) => {
       
       let user = users.find((u) => {return u.username === req.body.username && u.password === req.body.password});
       if (user) {
-        let token = jwt.sign({username: user.username}, authSecret);
+        let token = jwt.sign({username: user.username}, authSecret, {expiresIn: '120m'});
         res.send(JSON.stringify({
           type: "res",
           status: "true",
@@ -145,6 +175,31 @@ app.post("/users/auth", (req, res) => {
   }
 });
 
+
+app.get("/users/:user", authenticate, (req, res) => {
+  if(req.params.user === req.body.authinfo.username) {
+    let userInfo = users.find((u) => {return u.username === req.body.authinfo.username})
+    
+    res.status(200).send({
+      type: "res",
+      msg: "",
+      ...cleanPassword(userInfo)
+    });
+  } else {
+    res.send({
+      type: "err",
+      msg: `User ${req.body.authinfo.username} cant access this resource`
+    });
+  }
+});
+
+app.get("/ranking", authenticate, (req, res) => {
+  res.send({
+    first: "userfirst",
+    second: "usersecond",
+    third: "userthird"
+  });
+});
 
 app.get("/", (req, res) => {
   res.sendFile("/index.html");
