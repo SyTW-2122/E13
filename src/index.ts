@@ -156,7 +156,7 @@ app.post("/users/auth", (req, res) => {
           fullname : user.fullname,
           email : user.email,
           registration : user.registration,
-          accessToken : token,
+          authToken : token,
           msg: "User logged in"
         }));
       } else {
@@ -201,8 +201,8 @@ app.get("/ranking", authenticate, (req, res) => {
   });
 });
 
-app.get("/", (req, res) => {
-  res.sendFile("/index.html");
+app.get("*", (req, res) => {
+  res.redirect("/");
 });
 
 

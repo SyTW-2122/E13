@@ -4,7 +4,7 @@ import LoginForm from "./LoginForm";
 
 function Main(props) {
     let mainStyles = {
-        minHeight: "900px",
+        minHeight: "800px",
         marginTop: "5%",
         marginBottom: "5%",
         marginLeft: "20%",

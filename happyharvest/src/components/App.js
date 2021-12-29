@@ -1,17 +1,80 @@
-import Header from "./page-elements/Header";
-import Footer from "./page-elements/Footer";
-import Main from "./page-elements/Main";
+import SignIn from './SignIn';
+import SignUp from './SignUp';
+import Header from './page-elements/Header';
+import Footer from './page-elements/Footer';
+import Homepage from './Homepage';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { setToken } from '../actions/auth-actions';
+import { withCookies } from 'react-cookie';
+import { setUser } from '../actions/user-actions';
 
-function App() {
-  return (
-    <div>
-      <Main>
-        <h1>Happy Harvest</h1>
-        <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      </Main>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    const { cookies } = this.props;
+    let authToken = cookies.get("authToken");
+    let authUser = cookies.get("authUser");
+    if(authToken && authUser){
+      let requestOptions = {
+        method: 'GET',
+        headers: { 
+          'Authorization': `Bearer ${authToken}`
+        }
+      }
+
+      fetch(`http://10.6.130.90/users/${authUser}`, requestOptions).then(response => response.json()).then((e) => {
+          if (e.type === "res") {
+            this.props.onSetUser(e);
+            this.props.onSetToken(cookies.get("authToken"));
+          } else {
+            cookies.set("authToken", undefined, {path:"/"});
+            cookies.set("authUser", undefined, {path:"/"});
+          }
+
+        }).catch((e)=> {
+          alert(e);
+      });
+    } else {
+      cookies.set("authToken", undefined, {path:"/"});
+      cookies.set("authUser", undefined, {path:"/"});
+    }
+  }
+
+  render() {
+    return (
+      <Router>
+        <Header />
+        <Routes>
+          <Route exact path="/" element={<Homepage props={{username: this.props.currentUser.username}}/>} />
+          <Route path="/signin" element={<SignIn props={{username: this.props.currentUser.username}}/>} />
+          <Route path="/signup" element={<SignUp props={{username: this.props.currentUser.username}}/>} />
+        </Routes>
+        <Footer />
+      </Router>
+    );
+  }
+
 }
 
-export default App;
+
+const mapStateToProps = (state, props) => {
+  return ({
+    auth: state.auth,
+    currentUser: state.currentUser
+  });
+}
+
+const mapActionsToProps = (dispatch, props) => {
+  return bindActionCreators({
+    onSetToken: setToken,
+    onSetUser: setUser
+  }, dispatch); 
+}
+
+export default withCookies(connect(mapStateToProps, mapActionsToProps)(App));

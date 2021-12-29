@@ -1,14 +1,19 @@
 import Main from "./page-elements/Main";
 import SignUpForm from "./page-elements/SignUpForm";
+import { Navigate } from 'react-router'
 
-function SignUp() {
-  return (
-    <div>
-      <Main>
-        <SignUpForm />
-      </Main>
-    </div>
-  );
+function SignUp(props) {
+  if(props.props.username === ""){
+    return (
+      <div>
+        <Main>
+          <SignUpForm />
+        </Main>
+      </div>
+    );
+  } else {
+    return(<Navigate to="/"/>)
+  }
 }
 
 export default SignUp;

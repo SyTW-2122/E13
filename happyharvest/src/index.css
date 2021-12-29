@@ -13,6 +13,7 @@ code {
 }
 
 .Login {
+  margin-top: 10%;
   background-color: grey;
   padding: 20px;
   width: 50%;
@@ -54,3 +55,29 @@ code {
   text-align: center;
 }
 
+.Welcome {
+  margin-top: 10%;
+  background-color: grey;
+  padding: 20px;
+  width: 50%;
+  margin-left: 25%;
+}
+
+.Welcome button {
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 30%;
+  display: inline;
+}
+
+.Welcome h1 {
+  width: 100%;
+  text-align: center;
+  color: white;
+}
+
+.Welcome p {
+  width: 100%;
+  text-align: center;
+  color: white;
+}

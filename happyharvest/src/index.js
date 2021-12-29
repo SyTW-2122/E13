@@ -2,22 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
-import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
-import Header from './components/page-elements/Header';
-import Footer from './components/page-elements/Footer';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import currentUserReducer from './reducers/current-user-reducer';
+import { CookiesProvider } from 'react-cookie'
 import signUpReducer from './reducers/sign-up-reducer';
 import signInReducer from './reducers/sign-in-reducer';
+import authReducer from './reducers/auth-reducer';
 
 const allReducers = combineReducers({
   currentUser: currentUserReducer,
   signIn: signInReducer,
-  signUp: signUpReducer
+  signUp: signUpReducer,
+  auth: authReducer
 }); 
 
 const store = createStore(allReducers, {
@@ -41,6 +39,9 @@ const store = createStore(allReducers, {
     validUser : "",
     validPassword : "",
     validEmail : ""
+  },
+  auth: {
+    authToken: ""
   }
 },
 
@@ -50,17 +51,12 @@ window.devToolsExtension && window.devToolsExtension()
 
 ReactDOM.render(
   //<React.StrictMode>
-  <Provider store={store}>
-    <Router>
-    <Header />
-    <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="/signin" element={<SignIn />} />
-      <Route path="/signup" element={<SignUp />} />
-    </Routes>
-    <Footer />
-    </Router>
-  </Provider>,
+  <CookiesProvider>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </CookiesProvider>,
+  
 
   document.getElementById('root')
 );

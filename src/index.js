@@ -159,7 +159,7 @@ app.post("/users/auth", function (req, res) {
                     fullname: user.fullname,
                     email: user.email,
                     registration: user.registration,
-                    accessToken: token,
+                    authToken: token,
                     msg: "User logged in"
                 }));
             }
@@ -198,8 +198,8 @@ app.get("/ranking", authenticate, function (req, res) {
         third: "userthird"
     });
 });
-app.get("/", function (req, res) {
-    res.sendFile("/index.html");
+app.get("*", function (req, res) {
+    res.redirect("/");
 });
 app.listen(3000, "172.16.112.2", function () {
     console.log("Server a la escucha en el puerto 3000");

@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { updateSignInForm, resetSignInForm, updateSignInMessage } from '../../actions/sign-in-actions'
 import { setUser, logOut } from '../../actions/user-actions'
+import { withCookies } from "react-cookie";
+import { setToken } from "../../actions/auth-actions";
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -25,6 +27,8 @@ class LoginForm extends React.Component {
   }
 
   handleClick() {
+    const { cookies } = this.props;
+
     let requestOptions = {
       method: 'POST',
       headers: { 
@@ -37,16 +41,16 @@ class LoginForm extends React.Component {
       })
     }
 
-    let that = this;
     fetch("http://10.6.130.90/users/auth", requestOptions).then(response => response.json()).then((e) => {
-        that.setState({
-          logged: (e.logged === "true")?true:false,
-          msg: String(e.msg)
-        })
-        
+      console.log(e);
         if (e.status === "true") {
           this.props.onUpdateSignInMessage("");
           this.props.onSetUser(e);
+          if(e.authToken) {
+            cookies.set("authToken", e.authToken, {path: "/"}); 
+            cookies.set("authUser", e.username, {path:"/"});
+            this.props.onSetToken(cookies.get("authToken"));
+          }
         } else {
           this.props.onUpdateSignInMessage(e.msg);
         }
@@ -58,18 +62,14 @@ class LoginForm extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>{this.props.currentUser.username === "" ? "Logged Out" : "Logged In"}</h1>
-        <form className="Login">
-          <h2>Introduzca sus datos:</h2>
-          <input type="text" placeholder="Usuario" name="username" onChange={this.handleChange}></input>
-          <input type="password" placeholder="Contraseña" name= "password" onChange={this.handleChange} onKeyPress={this.handleKeyPress}></input>
-          <button type="button" onClick={this.handleClick}>Enviar</button>
-          <br></br>
-          <p>{this.props.signIn.msg}</p>
-        </form>
-      </div>
-      
+      <form className="Login">
+        <h2>Introduzca sus datos:</h2>
+        <input type="text" placeholder="Usuario" name="username" onChange={this.handleChange}></input>
+        <input type="password" placeholder="Contraseña" name= "password" onChange={this.handleChange} onKeyPress={this.handleKeyPress}></input>
+        <button type="button" onClick={this.handleClick}>Enviar</button>
+        <br></br>
+        <p>{this.props.signIn.msg}</p>
+      </form>      
     );
   }
 };
@@ -77,7 +77,8 @@ class LoginForm extends React.Component {
 const mapStateToProps = (state, props) => {
   return ({
     currentUser: state.currentUser,
-    signIn: state.signIn
+    signIn: state.signIn,
+    auth: state.auth
   });
 }
 
@@ -87,8 +88,9 @@ const mapActionsToProps = (dispatch, props) => {
     onResetSignInForm: resetSignInForm,
     onUpdateSignInMessage: updateSignInMessage,
     onSetUser: setUser,
-    onLogOut: logOut
+    onLogOut: logOut,
+    onSetToken: setToken
   }, dispatch); 
 }
 
-export default connect(mapStateToProps, mapActionsToProps)(LoginForm);
+export default withCookies(connect(mapStateToProps, mapActionsToProps)(LoginForm));
