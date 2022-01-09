@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { updateSignUpForm, resetSignUpForm, updateSignUpMessage } from '../../actions/sign-up-actions';
 
-class SignUpForm extends React.Component {
+export class SignUpForm extends React.Component {
   constructor() {
     super();
   
@@ -65,9 +65,9 @@ class SignUpForm extends React.Component {
           'Content-Type': 'application/json'
         }, 
         body: JSON.stringify({ 
-          "username": this.props.signUp.username?String(this.props.signUp.username):"-",
-          "password": this.props.signUp.password?String(this.props.signUp.password):"-",
-          "email": this.props.signUp.email?String(this.props.signUp.email):"-"
+          "username": this.props.signUp.username ? String(this.props.signUp.username) : "-",
+          "password": this.props.signUp.password ? String(this.props.signUp.password) : "-",
+          "email": this.props.signUp.email ? String(this.props.signUp.email) : "-"
         })
       }
 
@@ -84,9 +84,9 @@ class SignUpForm extends React.Component {
             });
 
             this.props.onUpdateSignUpMessage({
-              validUser: e.validUser?e.validUser:"",
-              validPassword: e.validPassword?e.validPassword:"",
-              validEmail: e.validEmail?e.validEmail:""
+              validUser: e.validUser ? e.validUser : "",
+              validPassword: e.validPassword ? e.validPassword : "",
+              validEmail: e.validEmail ? e.validEmail : ""
             });
 
           } else {

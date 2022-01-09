@@ -7,7 +7,7 @@ import { setUser, logOut } from '../../actions/user-actions'
 import { withCookies } from "react-cookie";
 import { setToken } from "../../actions/auth-actions";
 
-class LoginForm extends React.Component {
+export class LoginForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -36,8 +36,8 @@ class LoginForm extends React.Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        "username": this.props.signIn.username?String(this.props.signIn.username):"-",
-        "password": this.props.signIn.password?String(this.props.signIn.password):"-"
+        "username": this.props.signIn.username ? String(this.props.signIn.username) : "-",
+        "password": this.props.signIn.password ? String(this.props.signIn.password) : "-"
       })
     }
 
@@ -48,7 +48,7 @@ class LoginForm extends React.Component {
           this.props.onSetUser(e);
           if(e.authToken) {
             cookies.set("authToken", e.authToken, {path: "/"}); 
-            cookies.set("authUser", e.username, {path:"/"});
+            cookies.set("authUser", e.username, {path: "/"});
             this.props.onSetToken(cookies.get("authToken"));
           }
         } else {

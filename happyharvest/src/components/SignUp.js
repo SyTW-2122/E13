@@ -1,3 +1,4 @@
+import React from 'react';
 import Main from "./page-elements/Main";
 import SignUpForm from "./page-elements/SignUpForm";
 import { Navigate } from 'react-router'

@@ -12,7 +12,9 @@ validEmail : "" }, {type, payload}) {
   switch (type) {
     case UPDATE_SU_FORM:
       newState = {...state};
-      newState[payload.name] = payload.value;
+      if(newState[payload.name] != undefined){
+        newState[payload.name] = payload.value;
+      }
       return(newState);
 
     case RESET_SU_FORM:

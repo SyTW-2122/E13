@@ -6,7 +6,7 @@ import { logOut } from '../../actions/user-actions'
 import { withCookies } from "react-cookie";
 import { setToken } from "../../actions/auth-actions";
 
-class Header extends React.Component {
+export class Header extends React.Component {
     constructor(props) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
@@ -40,7 +40,7 @@ class Header extends React.Component {
                 <button type="button" onClick={this.handleClick}>Cerrar sesión</button>
             </nav>;
         
-        return(this.props.currentUser.username===""?notlogged:logged);
+        return(this.props.currentUser.username === "" ? notlogged : logged);
     }
 }
 
