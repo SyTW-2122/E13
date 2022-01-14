@@ -42,7 +42,6 @@ export class LoginForm extends React.Component {
     }
 
     fetch("http://10.6.130.90/users/auth", requestOptions).then(response => response.json()).then((e) => {
-      console.log(e);
         if (e.status === "true") {
           this.props.onUpdateSignInMessage("");
           this.props.onSetUser(e);
