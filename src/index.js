@@ -13,11 +13,13 @@ var __assign = (this && this.__assign) || function () {
 exports.__esModule = true;
 var express = require("express");
 var jwt = require("jsonwebtoken");
+var cors = require("cors");
 var path_1 = require("path");
 var app = express();
 app.use(express.urlencoded());
 app.use(express.json());
 app.use(express.static((0, path_1.join)(__dirname, '../happyharvest/build')));
+app.use(cors());
 var authSecret = 'aJDvksKOndi21FKDSasvbniopAD';
 function cleanPassword(obj) {
     var aux = __assign({}, obj);

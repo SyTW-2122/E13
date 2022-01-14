@@ -1,12 +1,14 @@
 import * as express from 'express';
 import * as jwt from 'jsonwebtoken';
-import {join} from 'path'
+import * as cors from 'cors';
+import {join} from 'path';
 
 const app = express();
 
 app.use(express.urlencoded());
 app.use(express.json());
 app.use(express.static(join(__dirname, '../happyharvest/build')));
+app.use(cors());
 
 const authSecret = 'aJDvksKOndi21FKDSasvbniopAD';
 
