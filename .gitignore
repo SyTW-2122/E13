@@ -7,7 +7,7 @@ yarn-error.log*
 lerna-debug.log*
 
 #package-lock
-package-lock.json
+#package-lock.json
 
 happyharvest/package-lock.json
 
