@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -27,3 +27,25 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install --legacy-peer-deps
     - run: npm test
+    - name: Send Slack Notification on Failure
+      if: ${{ failure() }}
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_CHANNEL: e13
+        SLACK_COLOR: "#9e2a2b"
+        SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_MESSAGE: "Failed tests"
+        SLACK_TITLE: Failed execution
+        SLACK_USERNAME: Test
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    - name: Send Slack Notification on Success
+      if: ${{ !failure() }}
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_CHANNEL: e13
+        SLACK_COLOR: "#7CFC00"
+        SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_MESSAGE: "Successful tests"
+        SLACK_TITLE: Successful tests
+        SLACK_USERNAME: Test
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
