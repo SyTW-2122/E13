@@ -49,3 +49,8 @@ jobs:
         SLACK_TITLE: Successful tests
         SLACK_USERNAME: Test
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    - name: Build React App
+      run: CI=false npm run build
+    - name: Deploy to Surge
+      run: surge ./happyharvest/build https://ullstwe13.surge.sh/ --token ${{ secrets.SURGE_SECRET }}
+
