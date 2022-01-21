@@ -84,6 +84,7 @@
     "jsonwebtoken": "^8.5.1"
   },
   "scripts": {
+    "build": "cd happyharvest && react-scripts build",
     "test": "cd happyharvest && NODE_ENV=test mocha --require @babel/register --require ignore-styles test/*.test.js"
   },
   "repository": {
