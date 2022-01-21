@@ -11,6 +11,8 @@ import { Header } from "../src/components/page-elements/Header";
 import Footer from "../src/components/page-elements/Footer";
 import FarmElement from "../src/components/FarmElement";
 import Homepage from "../src/components/Homepage";
+import { CropViewer } from "../src/components/CropViewer";
+
 
 configure({
    adapter: new Adapter()
@@ -177,5 +179,21 @@ describe("Testing <Homepage/> Component", () => {
       expect(wrapper.containsMatchingElement(<h1>Happy Harvest</h1>)).to.be.true;
    });
 
+   chai.use(chaiEnzyme());
+});
+
+describe("Testing <CropViewer/> Component", () => {
+   it("Should show user crops", () => {
+      const wrapper = shallow(<CropViewer props={{
+         username: "test", 
+         farmElements : {
+            "cropSpaces" : 9,
+            "animalSpaces" : 3,
+            "currentCrops" : [],
+            "currentAnimals" : [],
+         },
+      }}/>);
+      expect(wrapper.find("Crop.").length).to.be(9);
+   });
    chai.use(chaiEnzyme());
 });
