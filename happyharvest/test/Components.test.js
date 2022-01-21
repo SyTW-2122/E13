@@ -174,7 +174,7 @@ describe("Testing <Homepage/> Component", () => {
    });
    it("Should render main page if user is logged", () => {
       const wrapper = shallow(<Homepage props={{username: "test"}}/>);
-      expect(wrapper.containsMatchingElement(<h1>Happy Harvest</h1>)).to.be.true;
+      expect(wrapper.containsMatchingElement(<h1>Happy Harvest</h1>)).to.be.false;
    });
 
    chai.use(chaiEnzyme());
