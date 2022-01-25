@@ -154,10 +154,7 @@ app.post("/users/auth", (req, res) => {
         res.send(JSON.stringify({
           type: "res",
           status: "true",
-          username : user.username,
-          fullname : user.fullname,
-          email : user.email,
-          registration : user.registration,
+          ...user,
           authToken : token,
           msg: "User logged in"
         }));

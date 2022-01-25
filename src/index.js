@@ -154,16 +154,7 @@ app.post("/users/auth", function (req, res) {
             var user = users.find(function (u) { return u.username === req.body.username && u.password === req.body.password; });
             if (user) {
                 var token = jwt.sign({ username: user.username }, authSecret, { expiresIn: '120m' });
-                res.send(JSON.stringify({
-                    type: "res",
-                    status: "true",
-                    username: user.username,
-                    fullname: user.fullname,
-                    email: user.email,
-                    registration: user.registration,
-                    authToken: token,
-                    msg: "User logged in"
-                }));
+                res.send(JSON.stringify(__assign(__assign({ type: "res", status: "true" }, user), { authToken: token, msg: "User logged in" })));
             }
             else {
                 res.send(JSON.stringify({
