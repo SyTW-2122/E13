@@ -54,4 +54,4 @@ jobs:
     - name: Deploy to Surge
       run: npx surge ./happyharvest/build https://ullstwe13.surge.sh/ --token ${{ secrets.SURGE_SECRET }}
     - name: Upload coverage to Codecov
-      uses: npm coverage-test
+      run: npm coverage-test
