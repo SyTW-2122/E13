@@ -193,7 +193,7 @@ describe("Testing <CropViewer/> Component", () => {
             "currentAnimals" : [],
          },
       }}/>);
-      expect(wrapper.find("Crop.").length).to.be(9);
+      expect(wrapper.find("FarmElement.").length).to.be(9);
    });
    chai.use(chaiEnzyme());
 });

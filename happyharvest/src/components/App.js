@@ -3,6 +3,7 @@ import SignUp from './SignUp';
 import Header from './page-elements/Header';
 import Footer from './page-elements/Footer';
 import Homepage from './Homepage';
+import CropViewer from './CropViewer';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import React from 'react';
 import { bindActionCreators } from 'redux';
@@ -54,6 +55,7 @@ class App extends React.Component {
           <Route exact path="/" element={<Homepage props={{username: this.props.currentUser.username}}/>} />
           <Route path="/signin" element={<SignIn props={{username: this.props.currentUser.username}}/>} />
           <Route path="/signup" element={<SignUp props={{username: this.props.currentUser.username}}/>} />
+          <Route path="/Crops" element={<CropViewer />} />
         </Routes>
         <Footer />
       </Router>

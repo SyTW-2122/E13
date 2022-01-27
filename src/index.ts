@@ -45,13 +45,15 @@ const authenticate = (req:any, res:any, next:any) => {
   }
 }
 
+let auxDate = new Date;
 let users = [
   {
     username: "test", 
     password: "test", 
     email: "test@example.com", 
     fullname: "TestUser", 
-    registration: "20/12/21",
+//    registration: "20/12/21",
+    registration: 1643138355574,
     "farmElements" : {
    	 "cropSpaces" : 9,
    	 "animalSpaces" : 3,
@@ -70,17 +72,28 @@ let users = [
     password: "test2", 
     email: "test2@example.subdomain.com", 
     fullname: "TestUserTheSecond", 
-    registration: "10/12/21",
+    registration: 1643138355574,
     "farmElements" : {
    	 "cropSpaces" : 9,
    	 "animalSpaces" : 3,
-   	 "currentCrops" : [],
+   	 "currentCrops" : [{element : "crop",
+        type : "Calabaza", 
+        cycleTime : 36,
+        lastProduction : 1643138355574,
+        baseProduction : 3,
+        probability: 0.67,
+        product: {name: "Calabaza",
+                  icon : "https://cdn-icons-png.flaticon.com/512/2853/2853247.png",
+                  sellPrice : 850},
+        icon : "https://cdn-icons-png.flaticon.com/512/2853/2853247.png",
+        buyPrice : 500,
+        isBoosted : false}],
    	 "currentAnimals" : [],
     },  
     "inventory" : {
-      "currentCash" : "1000",
-      "cropBoost" : "0",
-      "animalBoost" : "0",
+      "currentCash" : 1000,
+      "cropBoost" : 0,
+      "animalBoost" : 0,
       "products" : []
     }
   }
@@ -113,7 +126,7 @@ app.post("/users", (req, res) => {
           password: req.body.password, 
           email: req.body.email, 
           fullname: req.body.username, 
-          registration: new Date().toDateString(),
+          registration: new Date().getTime(),
           "farmElements" : {
             "cropSpaces" : 9,
             "animalSpaces" : 3,
@@ -200,11 +213,15 @@ app.get("/ranking", authenticate, (req, res) => {
   });
 });
 
+app.get("/", (req, res) => {
+  res.sendFile("/index.html");
+});
+
 app.get("*", (req, res) => {
   res.redirect("/");
 });
 
-
 app.listen(3000, "172.16.112.2", () => {
   console.log("Server a la escucha en el puerto 3000");
+  console.log(new Date(1643138355574).toDateString())
 });

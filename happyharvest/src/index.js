@@ -23,7 +23,19 @@ const store = createStore(allReducers, {
     username : "",
     fullname : "",
     email : "",
-    registration : ""
+    registration : 0,
+    farmElements : {
+      cropSpaces : 0,
+      animalSpaces : 0,
+      currentCrops : [],
+      currentAnimals : [],
+    },  
+    inventory : {
+      currentCash : 0,
+      cropBoost : 0,
+      animalBoost : 0,
+      products : []
+    }
   },
   signIn: {
     username : "",
@@ -45,7 +57,7 @@ const store = createStore(allReducers, {
   }
 },
 
-window.devToolsExtension && window.devToolsExtension()
+window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 
 ); 
 

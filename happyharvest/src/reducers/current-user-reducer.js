@@ -3,7 +3,19 @@ import { LOG_OUT, SET_USER } from "../actions/user-actions";
 export default function signUpReducer(state = {username : "",
 fullname : "",
 email : "",
-registration : "" }, {type, payload}) {
+registration : 0,
+farmElements : {
+  cropSpaces : 0,
+  animalSpaces : 0,
+  currentCrops : [],
+  currentAnimals : [],
+},  
+inventory : {
+  currentCash : 0,
+  cropBoost : 0,
+  animalBoost : 0,
+  products : []
+} }, {type, payload}) {
   switch (type) {
     case SET_USER:
       return(payload);
@@ -13,7 +25,19 @@ registration : "" }, {type, payload}) {
         username : "",
         fullname : "",
         email : "",
-        registration : "" 
+        registration : 0,
+        farmElements : {
+          cropSpaces : 0,
+          animalSpaces : 0,
+          currentCrops : [],
+          currentAnimals : [],
+        },  
+        inventory : {
+          currentCash : 0,
+          cropBoost : 0,
+          animalBoost : 0,
+          products : []
+        } 
       });
   
     default:

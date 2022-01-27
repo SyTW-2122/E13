@@ -1,16 +1,45 @@
 import React from "react";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import FarmElement from "./FarmElement";
+import Main from "./page-elements/Main";
+import { Navigate, NavLink } from "react-router-dom";
 
 export class CropViewer extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
-    return <div></div>
+    if (this.props.currentUser.username === "") {
+      return <Navigate to = "/"/>
+    } else {
+      let crops = [];
+      for (let i = 0; i < this.props.currentUser.farmElements.cropSpaces; i++) {
+        if (this.props.currentUser.farmElements.currentCrops[i]) {
+          crops.push(<FarmElement elementInfo = {{...this.props.currentUser.farmElements.currentCrops[i]}} id = {String(i)} key = {String(i)} />);
+        } else {
+          crops.push(<FarmElement key = {String(i)} />);
+        }
+      }
+      console.log(crops)
+      return <div>
+        <Main>
+          <NavLink to = "/"><button>Volver</button></NavLink>
+          {crops}
+        </Main>
+      </div>
+    }
+    
   }
 };
-
+/*{this.props.currentUser.farmElements.currentCrops.map((v, i) => {<FarmElement elementInfo = {{
+  ...v,
+  id: i
+}}/>})}*/
 const mapStateToProps = (state, props) => {
   return ({
-
+    currentUser: state.currentUser
   });
 }
 
