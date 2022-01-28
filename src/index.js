@@ -20,7 +20,16 @@ var express = require("express");
 var jwt = require("jsonwebtoken");
 var cors = require("cors");
 var path_1 = require("path");
+var mongoose = require("mongoose");
+var database_1 = require("../config/database");
 var app = express();
+mongoose.connect(database_1.database.remoteUrl, { useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true }).then(function () {
+    console.log("Conected to database: " + database_1.database.remoteUrl);
+})["catch"](function (err) {
+    console.log(err);
+});
 app.use(express.urlencoded());
 app.use(express.json());
 app.use(express.static((0, path_1.join)(__dirname, '../happyharvest/build')));
