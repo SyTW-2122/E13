@@ -1,8 +1,8 @@
 import { UPDATE_SI_FORM, RESET_SI_FORM, UPDATE_SI_MSG } from '../actions/sign-in-actions'
 
-export default function signInReducer({type, payload}, state = {username : "",
+export default function signInReducer(state = {username : "",
 password : "",
-msg: ""}) {
+msg: ""}, {type, payload}) {
   let newState = {};
   switch (type) {
     case UPDATE_SI_FORM:

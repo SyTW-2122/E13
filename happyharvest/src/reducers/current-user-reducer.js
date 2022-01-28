@@ -1,6 +1,6 @@
 import { LOG_OUT, SET_USER } from "../actions/user-actions";
 
-export default function signUpReducer({type, payload}, state = {username : "",
+export default function signUpReducer(state = {username : "",
 fullname : "",
 email : "",
 registration : 0,
@@ -15,7 +15,7 @@ inventory : {
   cropBoost : 0,
   animalBoost : 0,
   products : []
-} }) {
+} }, {type, payload}) {
   switch (type) {
     case SET_USER:
       return(payload);

@@ -114,8 +114,8 @@ describe("Testing <SignUpForm/> Component", () => {
 });
 
 describe("Testing <Header/> Component", () => {
-   let styles = {};
-   beforeEach(() => { styles = { //Esto realmente se usa?
+   let styles = {}; //Esto realmente se usa?
+   beforeEach(() => { styles = { 
          height: "10%",
          width: "100%",
          backgroundColor: "green",
