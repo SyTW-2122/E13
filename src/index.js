@@ -1,26 +1,22 @@
 "use strict";
 var __assign = (this && this.__assign) || function () {
-  __assign = Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-      s = arguments[i];
-      for (var p in s) {
-        if (Object.prototype.hasOwnProperty.call(s, p)) {
-          t[p] = s[p];
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
         }
-      }           
-    }
-    return t;
-  };
-
-  return __assign.apply(this, arguments);
+        return t;
+    };
+    return __assign.apply(this, arguments);
 };
-
 exports.__esModule = true;
 var express = require("express");
 var jwt = require("jsonwebtoken");
 var cors = require("cors");
 var path_1 = require("path");
 var mongoose = require("mongoose");
+var userUtilities = require("./dbaccess/getUsers");
 var database_1 = require("../config/database");
 var app = express();
 mongoose.connect(database_1.database.remoteUrl, { useNewUrlParser: true,
@@ -36,34 +32,35 @@ app.use(express.static((0, path_1.join)(__dirname, '../happyharvest/build')));
 app.use(cors());
 var authSecret = 'aJDvksKOndi21FKDSasvbniopAD';
 function cleanPassword(obj) {
-  var aux = __assign({}, obj);
-  delete aux.password;
-  return aux;
+    var aux = __assign({}, obj);
+    delete aux.password;
+    return aux;
 }
 var authenticate = function (req, res, next) {
-  var authHeader = req.headers.authorization;
-  if (authHeader) {
-    var token = authHeader.split(' ')[1];
-    jwt.verify(token, authSecret, function (err, authinfo) {
-      if (err) {
-        return res.status(403).send({
-          type: "err",
-          msg: "Token could not be verified"
+    var authHeader = req.headers.authorization;
+    if (authHeader) {
+        var token = authHeader.split(' ')[1];
+        jwt.verify(token, authSecret, function (err, authinfo) {
+            if (err) {
+                return res.status(403).send({
+                    type: "err",
+                    msg: "Token could not be verified"
+                });
+            }
+            req.body.authinfo = authinfo;
+            next();
         });
-      }
-      req.body.authinfo = authinfo;
-      next();
-    });
-  }
-  else {
-    res.status(401).send({
-      type: "err",
-      msg: "Auth token must be provided"
-    });
-  }
+    }
+    else {
+        res.status(401).send({
+            type: "err",
+            msg: "Auth token must be provided"
+        });
+    }
 };
 var auxDate = new Date;
-var users = [{
+var users = [
+    {
         username: "test",
         password: "test",
         email: "test@example.com",
@@ -220,10 +217,52 @@ app.get("/ranking", authenticate, function (req, res) {
 app.get("/", function (req, res) {
     res.sendFile("/index.html");
 });
+app.get("/testing/getUsers", function (_, res) {
+    userUtilities.getUsers().then(function (list) {
+        res.status(200).send(list);
+    })["catch"](function (err) {
+        res.status(400).send(err);
+    });
+});
+app.get("/testing/findUserByName", function (req, res) {
+    userUtilities.findUserByName(req.query.username).then(function (list) {
+        res.status(200).send(list);
+    })["catch"](function (err) {
+        res.status(400).send(err);
+    });
+});
+app.get("/testing/checkIfUserReg", function (req, res) {
+    userUtilities.checkIfUserReg(req.query.username).then(function (list) {
+        res.status(200).send(list);
+    })["catch"](function (err) {
+        res.status(400).send(err);
+    });
+});
+app.get("/testing/checkIfEmailReg", function (req, res) {
+    userUtilities.checkIfEmailReg(req.query.email).then(function (list) {
+        res.status(200).send(list);
+    })["catch"](function (err) {
+        res.status(400).send(err);
+    });
+});
+app.post("/testing/postNewUser", function (req, res) {
+    userUtilities.postNewUser(req.body.userInfo).then(function (msg) {
+        res.status(200).send(msg);
+    })["catch"](function (err) {
+        res.status(400).send(err);
+    });
+});
+app.get("/testing/deleteOneUser", function (req, res) {
+    userUtilities.deleteOneUser(req.query.username).then(function (list) {
+        res.status(200).send(list);
+    })["catch"](function (err) {
+        res.status(400).send(err);
+    });
+});
 app.get("*", function (req, res) {
     res.redirect("/");
 });
 app.listen(3000, "172.16.112.2", function () {
     console.log("Server a la escucha en el puerto 3000");
-    console.log(new Date(1643138355574).toDateString());
+    console.log(database_1.database.remoteUrl);
 });

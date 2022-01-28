@@ -3,13 +3,16 @@ import * as jwt from 'jsonwebtoken';
 import * as cors from 'cors';
 import {join} from 'path';
 import * as mongoose from "mongoose";
-import { database } from "../config/database"
+import * as userUtilities from "./dbaccess/getUsers";
+import { database } from "../config/database";
 
 const app = express();
 
-mongoose.connect(database.remoteUrl, {useNewUrlParser: true,
+
+mongoose.connect(database.remoteUrl , {useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true,}).then(()=>{
+  useCreateIndex: true,}
+  ).then(()=>{
     console.log("Conected to database: " + database.remoteUrl);
   }).catch((err) => {
     console.log(err)
@@ -227,12 +230,59 @@ app.get("/", (req, res) => {
   res.sendFile("/index.html");
 });
 
+app.get("/testing/getUsers", (_, res) => {
+  userUtilities.getUsers().then((list) => {
+    res.status(200).send(list);
+  }).catch((err) => {
+    res.status(400).send(err);
+  });
+});
+
+app.get("/testing/findUserByName", (req, res) => {
+  userUtilities.findUserByName(req.query.username).then((list) => {
+    res.status(200).send(list);
+  }).catch((err) => {
+    res.status(400).send(err);
+  });
+});
+
+app.get("/testing/checkIfUserReg", (req, res) => {
+  userUtilities.checkIfUserReg(req.query.username).then((list) => {
+    res.status(200).send(list);
+  }).catch((err) => {
+    res.status(400).send(err);
+  });
+});
+
+app.get("/testing/checkIfEmailReg", (req, res) => {
+  userUtilities.checkIfEmailReg(req.query.email).then((list) => {
+    res.status(200).send(list);
+  }).catch((err) => {
+    res.status(400).send(err);
+  });
+});
+
+app.post("/testing/postNewUser", (req, res) => {
+  userUtilities.postNewUser(req.body.userInfo).then((msg) => {
+    res.status(200).send(msg);
+  }).catch((err) => {
+    res.status(400).send(err);
+  });
+});
+
+app.get("/testing/deleteOneUser", (req, res) => {
+  userUtilities.deleteOneUser(req.query.username).then((list) => {
+    res.status(200).send(list);
+  }).catch((err) => {
+    res.status(400).send(err);
+  });
+});
+
 app.get("*", (req, res) => {
   res.redirect("/");
 });
 
-
 app.listen(3000, "172.16.112.2", () => {
   console.log("Server a la escucha en el puerto 3000");
-  console.log(new Date(1643138355574).toDateString())
+  console.log(database.remoteUrl);
 });

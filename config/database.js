@@ -3,7 +3,7 @@ const databasePort = String("27017").trim();
 const databaseUser = String("user").trim();
 const databasePassword = String("user").trim();
 const databaseName = String("test").trim();
-const databaseConnectionOpts = String("--authenticationDatabase test").trim();
+const databaseConnectionOpts = String("--authenticationDatabase=test").trim();
 
  const database = {
   // Examples of valid connection strings.
