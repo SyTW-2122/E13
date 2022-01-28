@@ -90,7 +90,7 @@
   "scripts": {
     "build": "cd happyharvest && react-scripts build",
     "test": "cd happyharvest && NODE_ENV=test mocha --require @babel/register --require ignore-styles test/*.test.js",
-    "coverage-test": "cd happyharvest && nyc npm test && nyc report --reporter=text-lcov | codecov && rm -rf .nyc_output"
+    "coverage-test": "nyc npm test && nyc report --reporter=lcov"
   },
   "repository": {
     "type": "git",
