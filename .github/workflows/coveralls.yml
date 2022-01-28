@@ -28,4 +28,4 @@ jobs:
     - name: Coveralls Github Action
       uses: coverallsapp/github-action@master
       with: 
-        repo_token: S80RmbqUwdvkde4MzNHwRsQTTCxxGYWwt
+        github-token: S80RmbqUwdvkde4MzNHwRsQTTCxxGYWwt
