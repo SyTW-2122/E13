@@ -1,6 +1,4 @@
 import React from "react";
-import FarmElement from "../FarmElement";
-import LoginForm from "./LoginForm";
 
 function Main(props) {
     let mainStyles = {

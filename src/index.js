@@ -1,15 +1,20 @@
 "use strict";
 var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
+  __assign = Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) {
+          t[p] = s[p];
         }
-        return t;
-    };
-    return __assign.apply(this, arguments);
+      }           
+    }
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
 };
+
 exports.__esModule = true;
 var express = require("express");
 var jwt = require("jsonwebtoken");
@@ -22,35 +27,34 @@ app.use(express.static((0, path_1.join)(__dirname, '../happyharvest/build')));
 app.use(cors());
 var authSecret = 'aJDvksKOndi21FKDSasvbniopAD';
 function cleanPassword(obj) {
-    var aux = __assign({}, obj);
-    delete aux.password;
-    return aux;
+  var aux = __assign({}, obj);
+  delete aux.password;
+  return aux;
 }
 var authenticate = function (req, res, next) {
-    var authHeader = req.headers.authorization;
-    if (authHeader) {
-        var token = authHeader.split(' ')[1];
-        jwt.verify(token, authSecret, function (err, authinfo) {
-            if (err) {
-                return res.status(403).send({
-                    type: "err",
-                    msg: "Token could not be verified"
-                });
-            }
-            req.body.authinfo = authinfo;
-            next();
+  var authHeader = req.headers.authorization;
+  if (authHeader) {
+    var token = authHeader.split(' ')[1];
+    jwt.verify(token, authSecret, function (err, authinfo) {
+      if (err) {
+        return res.status(403).send({
+          type: "err",
+          msg: "Token could not be verified"
         });
-    }
-    else {
-        res.status(401).send({
-            type: "err",
-            msg: "Auth token must be provided"
-        });
-    }
+      }
+      req.body.authinfo = authinfo;
+      next();
+    });
+  }
+  else {
+    res.status(401).send({
+      type: "err",
+      msg: "Auth token must be provided"
+    });
+  }
 };
 var auxDate = new Date;
-var users = [
-    {
+var users = [{
         username: "test",
         password: "test",
         email: "test@example.com",

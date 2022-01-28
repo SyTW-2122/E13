@@ -1,13 +1,13 @@
 import { UPDATE_SU_FORM, RESET_SU_FORM, UPDATE_SU_MSG } from "../actions/sign-up-actions";
 
-export default function signUpReducer(state = {username : "",
+export default function signUpReducer({type, payload}, state = {username : "",
 password : "",
 email : "", 
 passwordRepeat : "",
 register: false,
 validUser : "",
 validPassword : "",
-validEmail : "" }, {type, payload}) {
+validEmail : "" }) {
   let newState = {};
   switch (type) {
     case UPDATE_SU_FORM:
@@ -17,7 +17,7 @@ validEmail : "" }, {type, payload}) {
       }
       return(newState);
 
-    case RESET_SU_FORM:
+    case RESET_SU_FORM: //Si ponemos esto como default...?
       return({
         username : "",
         password : "",

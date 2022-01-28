@@ -32,11 +32,8 @@ export class CropViewer extends React.Component {
     }
     
   }
-};
-/*{this.props.currentUser.farmElements.currentCrops.map((v, i) => {<FarmElement elementInfo = {{
-  ...v,
-  id: i
-}}/>})}*/
+}
+
 const mapStateToProps = (state, props) => {
   return ({
     currentUser: state.currentUser

@@ -115,7 +115,7 @@ describe("Testing <SignUpForm/> Component", () => {
 
 describe("Testing <Header/> Component", () => {
    let styles = {};
-   beforeEach(() => { styles = {
+   beforeEach(() => { styles = { //Esto realmente se usa?
          height: "10%",
          width: "100%",
          backgroundColor: "green",
