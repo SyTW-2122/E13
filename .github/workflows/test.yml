@@ -53,5 +53,3 @@ jobs:
       run: CI=false npm run build
     - name: Deploy to Surge
       run: npx surge ./happyharvest/build https://ullstwe13.surge.sh/ --token ${{ secrets.SURGE_SECRET }}
-    - name: Upload coverage to Codecov
-      run: npm coverage-test
