@@ -151,15 +151,15 @@ describe("Testing <FarmElement/> Component", () => {
    it("Should render according to props", () => {
       let newDate = new Date();
       let auxDate = new Date(newDate.getTime() + (1000 * 60 * 60 * 48));
-      const wrapper = shallow(<FarmElement props={{element: "crop",
+      const wrapper = shallow(<FarmElement elementInfo={{element: "crop",
          type: "Tomate",
          cycleTime: 48,
-         lastProduction: newDate,
+         lastProduction: newDate.getTime(),
          baseProduction: 1,
          icon: "some.example.url"}} />);
       expect(wrapper.containsMatchingElement(<p>Nombre: Tomate</p>)).to.be.true;
-      expect(wrapper.containsMatchingElement(<p>Fecha de cultivo: {String(newDate.getDate()) + "/" + String(newDate.getMonth()) + "/" + String(newDate.getFullYear()) + " " + String(newDate.getHours()) + ":" + String(newDate.getMinutes())}</p>)).to.be.true;         
-      expect(wrapper.containsMatchingElement(<p> Fecha de recogida: {String(auxDate.getDate()) + "/" + String(auxDate.getMonth()) + "/" + String(auxDate.getFullYear()) +  " " + String(auxDate.getHours()) + ":" + String(auxDate.getMinutes())}</p>)).to.be.true;
+      expect(wrapper.containsMatchingElement(<p>Fecha de cultivo: {String(newDate.getDate()) + "/" + String(newDate.getMonth() + 1) + "/" + String(newDate.getFullYear()) + " " + String(newDate.getHours()) + ":" + String(newDate.getMinutes())}</p>)).to.be.true;         
+      expect(wrapper.containsMatchingElement(<p> Fecha de recogida: {String(auxDate.getDate()) + "/" + String(auxDate.getMonth() + 1) + "/" + String(auxDate.getFullYear()) +  " " + String(auxDate.getHours()) + ":" + String(auxDate.getMinutes())}</p>)).to.be.true;
       expect(wrapper.containsMatchingElement(<img src="some.example.url" alt="" style={{width: "64px", height: "64px"}}></img>)).to.be.true;
    }); 
 
@@ -184,7 +184,7 @@ describe("Testing <Homepage/> Component", () => {
 
 describe("Testing <CropViewer/> Component", () => {
    it("Should show user crops", () => {
-      const wrapper = shallow(<CropViewer props={{
+      const wrapper = shallow(<CropViewer currentUser={{
          username: "test", 
          farmElements : {
             "cropSpaces" : 9,
@@ -193,7 +193,7 @@ describe("Testing <CropViewer/> Component", () => {
             "currentAnimals" : [],
          },
       }}/>);
-      expect(wrapper.find("FarmElement.").length).to.be(9);
+      expect(wrapper.find("FarmElement").length).to.be.equal(9);
    });
    chai.use(chaiEnzyme());
 });

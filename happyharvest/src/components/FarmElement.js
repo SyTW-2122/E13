@@ -15,7 +15,7 @@ class FarmElement extends React.Component {
             return (
                 <div>
                     <p>
-                        Nombre: {this.props.elementInfo.type}, id: {this.props.id}
+                        Nombre: {this.props.elementInfo.type}
                     </p>
                     <p>
                         Fecha de cultivo: {String(auxDate.getDate()) + "/" + String(auxDate.getMonth() + 1) + "/" + String(auxDate.getFullYear()) +

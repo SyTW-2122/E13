@@ -26,7 +26,19 @@ describe('Redux store test demonstration', () => {
                 username : "",
                 fullname : "",
                 email : "",
-                registration : ""
+                registration : 0,
+                farmElements : {
+                    cropSpaces : 0,
+                    animalSpaces : 0,
+                    currentCrops : [],
+                    currentAnimals : [],
+                },  
+                inventory : {
+                    currentCash : 0,
+                    cropBoost : 0,
+                    animalBoost : 0,
+                    products : []
+                } 
             },
             signIn: {
                 username : "",
@@ -54,47 +66,71 @@ describe('Redux store test demonstration', () => {
             expect(store.getState().currentUser.username).to.equal("");
             expect(store.getState().currentUser.fullname).to.equal("");
             expect(store.getState().currentUser.email).to.equal("");
-            expect(store.getState().currentUser.registration).to.equal("");
+            expect(store.getState().currentUser.registration).to.equal(0);
         });
         it('Dispatch SET_USER should change the state', () => {
             // dispatch SET_USER, el estado debe haberse actualizado con los valores correspondientes
-            let currDate = new Date().toDateString();
+            let currDate = new Date().getTime();
             store.dispatch(setUser({
                 username: "Test",
                 fullname: "TestUser",
                 email: "test@example.com",
-                registration: String(currDate)
+                registration: currDate,
+                farmElements : {
+                    cropSpaces : 0,
+                    animalSpaces : 0,
+                    currentCrops : [],
+                    currentAnimals : [],
+                },  
+                inventory : {
+                    currentCash : 0,
+                    cropBoost : 0,
+                    animalBoost : 0,
+                    products : []
+                }
             }));
             expect(store.getState().currentUser.username).to.equal("Test");
             expect(store.getState().currentUser.fullname).to.equal("TestUser");
             expect(store.getState().currentUser.email).to.equal("test@example.com");
-            expect(store.getState().currentUser.registration).to.equal(String(currDate));
+            expect(store.getState().currentUser.registration).to.equal(currDate);
 
             expect(store.getState().currentUser.username).not.to.equal("");
             expect(store.getState().currentUser.fullname).not.to.equal("");
             expect(store.getState().currentUser.email).not.to.equal("");
-            expect(store.getState().currentUser.registration).not.to.equal("");
+            expect(store.getState().currentUser.registration).not.to.equal(0);
 
         });
         it('Dispatch LOG_OUT should reset the state', () => {
             // dispatch LOG_OUT, el estado debe haber retornado a su valor inicial
-            let currDate = new Date().toDateString();
+            let currDate = new Date().getTime();
             store.dispatch(setUser({
                 username: "Test",
                 fullname: "TestUser",
                 email: "test@example.com",
-                registration: String(currDate)
+                registration: currDate,
+                farmElements : {
+                    cropSpaces : 0,
+                    animalSpaces : 0,
+                    currentCrops : [],
+                    currentAnimals : [],
+                },  
+                inventory : {
+                    currentCash : 0,
+                    cropBoost : 0,
+                    animalBoost : 0,
+                    products : []
+                }
             }));
             expect(store.getState().currentUser.username).not.to.equal("");
             expect(store.getState().currentUser.fullname).not.to.equal("");
             expect(store.getState().currentUser.email).not.to.equal("");
-            expect(store.getState().currentUser.registration).not.to.equal("");
+            expect(store.getState().currentUser.registration).not.to.equal(0);
 
             store.dispatch(logOut());
             expect(store.getState().currentUser.username).to.equal("");
             expect(store.getState().currentUser.fullname).to.equal("");
             expect(store.getState().currentUser.email).to.equal("");
-            expect(store.getState().currentUser.registration).to.equal("");
+            expect(store.getState().currentUser.registration).to.equal(0);
         });
         it('Dispatch an unvalid action should not modify the state', () => {
             // dispatch una acción no registrada y esperar que el estado no cambie
@@ -102,7 +138,7 @@ describe('Redux store test demonstration', () => {
             expect(store.getState().currentUser.username).to.equal("");
             expect(store.getState().currentUser.fullname).to.equal("");
             expect(store.getState().currentUser.email).to.equal("");
-            expect(store.getState().currentUser.registration).to.equal("");
+            expect(store.getState().currentUser.registration).to.equal(0);
         });
     });
 
