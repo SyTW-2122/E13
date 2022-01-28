@@ -2,8 +2,18 @@ import * as express from 'express';
 import * as jwt from 'jsonwebtoken';
 import * as cors from 'cors';
 import {join} from 'path';
+import * as mongoose from "mongoose";
+import { database } from "../config/database"
 
 const app = express();
+
+mongoose.connect(database.remoteUrl, {useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,}).then(()=>{
+    console.log("Conected to database: " + database.remoteUrl);
+  }).catch((err) => {
+    console.log(err)
+  });
 
 app.use(express.urlencoded());
 app.use(express.json());
@@ -220,6 +230,7 @@ app.get("/", (req, res) => {
 app.get("*", (req, res) => {
   res.redirect("/");
 });
+
 
 app.listen(3000, "172.16.112.2", () => {
   console.log("Server a la escucha en el puerto 3000");
