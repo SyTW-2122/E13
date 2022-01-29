@@ -70,7 +70,7 @@ export class SignUpForm extends React.Component {
           "email": this.props.signUp.email ? String(this.props.signUp.email) : "-"
         })
       }
-
+//
       fetch("http://10.6.130.90/users", requestOptions).then(response => response.json()).then((e) => {
           console.log(e);
           if(e.type === "res") {

@@ -39,7 +39,7 @@ class App extends React.Component {
           }
 
         }).catch((e)=> {
-          alert(e);
+          console.log(e);
       });
     } else {
       cookies.set("authToken", undefined, {path:"/"});
