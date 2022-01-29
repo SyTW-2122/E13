@@ -16,7 +16,7 @@ function findUserByName(nick) {
             if(list.length == 0) {
                 rej("No user found");
             } else {
-                res(list);
+                res(list[0]);
             }
         }).catch((err) => {
             rej(err);
@@ -24,10 +24,48 @@ function findUserByName(nick) {
     })
 }
 
-function checkIfUserReg(nick) {
+function returnCleanUser(nick) {
+    let aux = {
+        "username": "",
+        "email": "", 
+        "fullname": "",
+        "registration": 0,
+        "farmElements" : {
+            "cropSpaces" : 0,
+            "animalSpaces" : 0,
+            "currentCrops" : [],
+            "currentAnimals" : [],
+        },
+        "inventory" : {
+            "currentCash" : 0,
+            "cropBoost" : 0,
+            "animalBoost" : 0,
+            "products" : []
+        }
+    }
     return new Promise((res, rej) => {
         userModule.User.find({username: nick}).then((list) => {
             if(list.length == 0) {
+                rej("No user found");
+            } else {
+                for(prop in aux) {
+                    aux[prop] = list[0][prop]
+                }
+                res(aux);
+            }
+        }).catch((err) => {
+            rej(err);
+        })
+    })
+}
+
+function validateUser(user, passwd){
+    return new Promise((res, rej) => {
+        userModule.User.find({username: user}).then((list) => {
+            if(list.length == 0) {
+                rej("No user found");
+            }
+            if(list[0].password == passwd) {
                 res(true);
             } else {
                 res(false);
@@ -38,22 +76,43 @@ function checkIfUserReg(nick) {
     })
 }
 
-function checkIfEmailReg(nick) {
+function checkIfValidReg(queryUser, queryEmail) {
     return new Promise((res, rej) => {
-        userModule.User.find({email: nick}).then((list) => {
-            if(list.length == 0) {
-                res(true);
-            } else {
-                res(false);
-            }
-        }).catch((err) => {
-            rej(err);
-        })
+        let user
+        let email
+        try {
+            userModule.User.find({username: queryUser}).then((userval) => {
+                user = userval;
+                userModule.User.find({email: queryEmail}).then((emailval) => {
+                    email = emailval;
+                    if(user.length > 0){
+                        res({
+                            type: "res",
+                            register: false,
+                            validUser: "Ese usuario ya se encuentra registrado"
+                        });
+                    }
+                    if(email.length > 0){
+                        res({
+                            type: "res",
+                            register: false,
+                            validEmail: "Ese correo ya se encuentra registrado"
+                        });
+                    }
+                    res({
+                        val: true,
+                        msg: ""
+                    });
+                })
+
+            });
+        } catch(err) {
+            rej(err)
+        }
     })
 }
 
 function postNewUser(userInfo) {
-    console.log(userInfo)
     let newUser = new userModule.User(userInfo);
     return new Promise((res, rej) => {
         newUser.save().then(() => {
@@ -66,8 +125,16 @@ function postNewUser(userInfo) {
 
 function deleteOneUser(nick) {
     return new Promise((res, rej) => {
-        userModule.User.deleteOne({username: nick}).then(() => {
-            res("User deleted");
+        if(!nick) {
+            rej("Query field required - 'username'")
+        }
+        userModule.User.deleteOne({username: nick}).then((deletions) => {
+            if(deletions.deletedCount == 0) {
+                rej(`User ${nick} does not exist`)
+            } else {
+                res("User succesfully deleted");
+            }
+            
         }).catch((err) => {
             rej(err);
         })
@@ -76,7 +143,8 @@ function deleteOneUser(nick) {
 
 exports.getUsers = getUsers
 exports.findUserByName = findUserByName
-exports.checkIfUserReg = checkIfUserReg
-exports.checkIfEmailReg = checkIfEmailReg
+exports.checkIfValidReg = checkIfValidReg
 exports.postNewUser = postNewUser
 exports.deleteOneUser = deleteOneUser
+exports.validateUser = validateUser
+exports.returnCleanUser = returnCleanUser

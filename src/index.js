@@ -112,53 +112,52 @@ var users = [
     }
 ];
 app.post("/users", function (req, res) {
-    console.log(req.body);
     try {
         if (!req.body.username || !req.body.password || !req.body.email) {
             throw new Error("User request must have username, email and password fields");
         }
         else {
-            var user = users.find(function (u) { return u.username === req.body.username; });
-            var email = users.find(function (u) { return u.email === req.body.email; });
-            if (user) {
-                res.send(JSON.stringify({
-                    type: "res",
-                    register: "false",
-                    validUser: "El usuario ya existe"
+            userUtilities.checkIfValidReg(req.body.username, req.body.email).then(function (v) {
+                if (v.register == false) {
+                    res.status(400).send(JSON.stringify(v));
+                }
+                else {
+                    userUtilities.postNewUser({
+                        username: req.body.username,
+                        password: req.body.password,
+                        email: req.body.email,
+                        fullname: req.body.username,
+                        registration: new Date().getTime(),
+                        "farmElements": {
+                            "cropSpaces": 9,
+                            "animalSpaces": 3,
+                            "currentCrops": [],
+                            "currentAnimals": []
+                        },
+                        "inventory": {
+                            "currentCash": 1000,
+                            "cropBoost": 0,
+                            "animalBoost": 0,
+                            "products": []
+                        }
+                    }).then(function () {
+                        res.send(JSON.stringify({
+                            type: "res",
+                            register: "true"
+                        }));
+                    })["catch"](function (err) {
+                        res.status(500).send(JSON.stringify({
+                            type: "err",
+                            msg: err
+                        }));
+                    });
+                }
+            })["catch"](function (err) {
+                res.status(500).send(JSON.stringify({
+                    type: "err",
+                    msg: err
                 }));
-            }
-            else if (email) {
-                res.send(JSON.stringify({
-                    type: "res",
-                    register: "false",
-                    validEmail: "Usted ya posee una cuenta asociada a este correo"
-                }));
-            }
-            else {
-                users.push({
-                    username: req.body.username,
-                    password: req.body.password,
-                    email: req.body.email,
-                    fullname: req.body.username,
-                    registration: new Date().getTime(),
-                    "farmElements": {
-                        "cropSpaces": 9,
-                        "animalSpaces": 3,
-                        "currentCrops": [],
-                        "currentAnimals": []
-                    },
-                    "inventory": {
-                        "currentCash": 1000,
-                        "cropBoost": 0,
-                        "animalBoost": 0,
-                        "products": []
-                    }
-                });
-                res.send(JSON.stringify({
-                    type: "res",
-                    register: "true"
-                }));
-            }
+            });
         }
     }
     catch (err) {
@@ -170,22 +169,36 @@ app.post("/users", function (req, res) {
 });
 app.post("/users/auth", function (req, res) {
     try {
+        console.log("patata");
         if (!req.body.username || !req.body.password) {
             throw new Error("User request must have username and password fields");
         }
         else {
-            var user = users.find(function (u) { return u.username === req.body.username && u.password === req.body.password; });
-            if (user) {
-                var token = jwt.sign({ username: user.username }, authSecret, { expiresIn: '120m' });
-                res.send(JSON.stringify(__assign(__assign({ type: "res", status: "true" }, user), { authToken: token, msg: "User logged in" })));
-            }
-            else {
-                res.send(JSON.stringify({
-                    type: "res",
-                    status: "false",
-                    msg: "Wrong user or password"
+            userUtilities.validateUser(req.body.username, req.body.password).then(function (v) {
+                if (v) {
+                    userUtilities.returnCleanUser(req.body.username).then(function (user) {
+                        var token = jwt.sign({ username: user.username }, authSecret, { expiresIn: '120m' });
+                        res.send(JSON.stringify(__assign(__assign({ type: "res", status: "true" }, user), { authToken: token, msg: "User logged in" })));
+                    })["catch"](function (err) {
+                        res.status(500).send(JSON.stringify({
+                            type: "err",
+                            msg: err
+                        }));
+                    });
+                }
+                else {
+                    res.send(JSON.stringify({
+                        type: "res",
+                        status: "false",
+                        msg: "Wrong user or password"
+                    }));
+                }
+            })["catch"](function (err) {
+                res.status(500).send(JSON.stringify({
+                    type: "err",
+                    msg: err
                 }));
-            }
+            });
         }
     }
     catch (err) {
@@ -197,8 +210,14 @@ app.post("/users/auth", function (req, res) {
 });
 app.get("/users/:user", authenticate, function (req, res) {
     if (req.params.user === req.body.authinfo.username) {
-        var userInfo = users.find(function (u) { return u.username === req.body.authinfo.username; });
-        res.status(200).send(__assign({ type: "res", msg: "" }, cleanPassword(userInfo)));
+        userUtilities.returnCleanUser(req.body.authinfo.username).then(function (userInfo) {
+            res.status(200).send(__assign({ type: "res", msg: "" }, cleanPassword(userInfo)));
+        })["catch"](function (err) {
+            res.status(500).send(JSON.stringify({
+                type: "err",
+                msg: err
+            }));
+        });
     }
     else {
         res.send({
@@ -231,29 +250,22 @@ app.get("/testing/findUserByName", function (req, res) {
         res.status(400).send(err);
     });
 });
-app.get("/testing/checkIfUserReg", function (req, res) {
-    userUtilities.checkIfUserReg(req.query.username).then(function (list) {
-        res.status(200).send(list);
-    })["catch"](function (err) {
-        res.status(400).send(err);
-    });
-});
-app.get("/testing/checkIfEmailReg", function (req, res) {
-    userUtilities.checkIfEmailReg(req.query.email).then(function (list) {
-        res.status(200).send(list);
-    })["catch"](function (err) {
-        res.status(400).send(err);
-    });
-});
-app.post("/testing/postNewUser", function (req, res) {
-    userUtilities.postNewUser(req.body.userInfo).then(function (msg) {
-        res.status(200).send(msg);
-    })["catch"](function (err) {
-        res.status(400).send(err);
-    });
-});
 app.get("/testing/deleteOneUser", function (req, res) {
     userUtilities.deleteOneUser(req.query.username).then(function (list) {
+        res.status(200).send(list);
+    })["catch"](function (err) {
+        res.status(400).send(err);
+    });
+});
+app.get("/testing/validateUser", function (req, res) {
+    userUtilities.validateUser(req.query.username, req.query.password).then(function (v) {
+        res.status(200).send(v);
+    })["catch"](function (err) {
+        res.status(400).send(err);
+    });
+});
+app.get("/testing/returnCleanUser", function (req, res) {
+    userUtilities.returnCleanUser(req.query.username).then(function (list) {
         res.status(200).send(list);
     })["catch"](function (err) {
         res.status(400).send(err);

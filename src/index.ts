@@ -113,51 +113,50 @@ let users = [
 ]
 
 app.post("/users", (req, res) => {
-  console.log(req.body);
   try {
     if (!req.body.username || !req.body.password || !req.body.email) {
       throw new Error("User request must have username, email and password fields");
     } else {
-      
-      let user = users.find((u) => {return u.username === req.body.username});
-      let email = users.find((u) => {return u.email === req.body.email});
-      if (user) {
-        res.send(JSON.stringify({
-          type: "res",
-          register: "false",
-          validUser: "El usuario ya existe"
-        }));
-      } else if (email) {
-        res.send(JSON.stringify({
-          type: "res",
-          register: "false",
-          validEmail: "Usted ya posee una cuenta asociada a este correo"
-        }));
-      } else {
-        users.push({
-          username: req.body.username, 
-          password: req.body.password, 
-          email: req.body.email, 
-          fullname: req.body.username, 
-          registration: new Date().getTime(),
-          "farmElements" : {
-            "cropSpaces" : 9,
-            "animalSpaces" : 3,
-            "currentCrops" : [],
-            "currentAnimals" : [],
-          },
-          "inventory" : {
-            "currentCash" : 1000,
-            "cropBoost" : 0,
-            "animalBoost" : 0,
-            "products" : []
-          }
-        });
-        res.send(JSON.stringify({
-          type: "res",
-          register: "true"
-        }));
-      }
+      userUtilities.checkIfValidReg(req.body.username, req.body.email).then((v) => {
+        if(v.register == false) {
+          res.status(400).send(JSON.stringify(v))
+        } else {
+          userUtilities.postNewUser({
+            username: req.body.username, 
+            password: req.body.password, 
+            email: req.body.email, 
+            fullname: req.body.username, 
+            registration: new Date().getTime(),
+            "farmElements" : {
+              "cropSpaces" : 9,
+              "animalSpaces" : 3,
+              "currentCrops" : [],
+              "currentAnimals" : [],
+            },
+            "inventory" : {
+              "currentCash" : 1000,
+              "cropBoost" : 0,
+              "animalBoost" : 0,
+              "products" : []
+            }
+          }).then(() => {
+            res.send(JSON.stringify({
+              type: "res",
+              register: "true"
+            }));
+          }).catch((err) => {
+            res.status(500).send(JSON.stringify({
+              type: "err",
+              msg: err
+            }));
+          });
+        }
+      }).catch((err) => {
+        res.status(500).send(JSON.stringify({
+          type: "err",
+          msg: err
+        }))
+      })
     }
   } catch (err) {
     res.status(400).send(JSON.stringify({
@@ -169,28 +168,39 @@ app.post("/users", (req, res) => {
 
 app.post("/users/auth", (req, res) => {
   try {
-    
     if (!req.body.username || !req.body.password) {
       throw new Error("User request must have username and password fields");
     } else {
-      
-      let user = users.find((u) => {return u.username === req.body.username && u.password === req.body.password});
-      if (user) {
-        let token = jwt.sign({username: user.username}, authSecret, {expiresIn: '120m'});
-        res.send(JSON.stringify({
-          type: "res",
-          status: "true",
-          ...user,
-          authToken : token,
-          msg: "User logged in"
-        }));
-      } else {
-        res.send(JSON.stringify({
-          type: "res",
-          status: "false",
-          msg: "Wrong user or password"
-        }));
-      }
+      userUtilities.validateUser(req.body.username, req.body.password).then((v) => {
+        if(v) {
+          userUtilities.returnCleanUser(req.body.username).then((user) => {
+            let token = jwt.sign({username: user.username}, authSecret, {expiresIn: '120m'});
+            res.send(JSON.stringify({
+              type: "res",
+              status: "true",
+              ...user,
+              authToken : token,
+              msg: "User logged in"
+            }));
+          }).catch((err) => {
+            res.status(500).send(JSON.stringify({
+              type: "err",
+              msg: err
+            }))
+          });
+        } else {
+          res.send(JSON.stringify({
+            type: "res",
+            status: "false",
+            msg: "Wrong user or password"
+          }));
+        }
+      }).catch((err) => {
+        res.status(500).send(JSON.stringify({
+          type: "err",
+          msg: err
+        }))
+      });
     }
   } catch (err) {
     res.status(400).send(JSON.stringify({
@@ -203,13 +213,20 @@ app.post("/users/auth", (req, res) => {
 
 app.get("/users/:user", authenticate, (req, res) => {
   if(req.params.user === req.body.authinfo.username) {
-    let userInfo = users.find((u) => {return u.username === req.body.authinfo.username})
+    userUtilities.returnCleanUser(req.body.authinfo.username).then((userInfo) => {
+        res.status(200).send({
+        type: "res",
+        msg: "",
+        ...cleanPassword(userInfo)
+      });
+    }).catch((err) => {
+      res.status(500).send(JSON.stringify({
+        type: "err",
+        msg: err
+      }))
+    })
     
-    res.status(200).send({
-      type: "res",
-      msg: "",
-      ...cleanPassword(userInfo)
-    });
+    
   } else {
     res.send({
       type: "err",
@@ -230,6 +247,7 @@ app.get("/", (req, res) => {
   res.sendFile("/index.html");
 });
 
+
 app.get("/testing/getUsers", (_, res) => {
   userUtilities.getUsers().then((list) => {
     res.status(200).send(list);
@@ -246,30 +264,6 @@ app.get("/testing/findUserByName", (req, res) => {
   });
 });
 
-app.get("/testing/checkIfUserReg", (req, res) => {
-  userUtilities.checkIfUserReg(req.query.username).then((list) => {
-    res.status(200).send(list);
-  }).catch((err) => {
-    res.status(400).send(err);
-  });
-});
-
-app.get("/testing/checkIfEmailReg", (req, res) => {
-  userUtilities.checkIfEmailReg(req.query.email).then((list) => {
-    res.status(200).send(list);
-  }).catch((err) => {
-    res.status(400).send(err);
-  });
-});
-
-app.post("/testing/postNewUser", (req, res) => {
-  userUtilities.postNewUser(req.body.userInfo).then((msg) => {
-    res.status(200).send(msg);
-  }).catch((err) => {
-    res.status(400).send(err);
-  });
-});
-
 app.get("/testing/deleteOneUser", (req, res) => {
   userUtilities.deleteOneUser(req.query.username).then((list) => {
     res.status(200).send(list);
@@ -277,6 +271,24 @@ app.get("/testing/deleteOneUser", (req, res) => {
     res.status(400).send(err);
   });
 });
+
+app.get("/testing/validateUser", (req, res) => {
+  userUtilities.validateUser(req.query.username, req.query.password).then((v) => {
+    res.status(200).send(v);
+  }).catch((err) => {
+    res.status(400).send(err);
+  });
+});
+
+app.get("/testing/returnCleanUser", (req, res) => {
+  userUtilities.returnCleanUser(req.query.username).then((list) => {
+    res.status(200).send(list);
+  }).catch((err) => {
+    res.status(400).send(err);
+  });
+});
+
+
 
 app.get("*", (req, res) => {
   res.redirect("/");
