@@ -1,7 +1,6 @@
 import React from "react";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import FarmElement from "./FarmElement";
 import Main from "./page-elements/Main";
 import { Navigate, NavLink } from "react-router-dom";
 

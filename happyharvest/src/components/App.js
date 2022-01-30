@@ -5,6 +5,7 @@ import Footer from './page-elements/Footer';
 import Homepage from './Homepage';
 import CropViewer from './CropViewer';
 import Inventory from './Inventory';
+import Shop from './Shop';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import React from 'react';
 import { bindActionCreators } from 'redux';
@@ -58,6 +59,7 @@ class App extends React.Component {
           <Route path="/signup" element={<SignUp props={{username: this.props.currentUser.username}}/>} />
           <Route path="/Crops" element={<CropViewer />} />
           <Route path="/Inventory" element={<Inventory />} />
+          <Route path="/Shop" element={<Shop />} />
         </Routes>
         <Footer />
       </Router>

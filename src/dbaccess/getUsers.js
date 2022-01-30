@@ -176,7 +176,7 @@ function buySeeds(nick, name, quantity) {
                 rej("No user found");
             } else {
                 let entity = list[0];
-                if(Number(entity.inventory.currentCash) > Number(Crops[name].buyPrice)*Number(quantity)){
+                if(Number(entity.inventory.currentCash) >= Number(Crops[name].buyPrice)*Number(quantity)){
                     let val = Number(quantity);
                     entity.inventory.currentCash = Number(entity.inventory.currentCash) - Number(Crops[name].buyPrice)*Number(quantity);
                     for(let i = 0; i < entity.inventory.seeds.length; i++) {
@@ -188,7 +188,7 @@ function buySeeds(nick, name, quantity) {
                     
                     entity.inventory.seeds.push([Number(val), {...Crops[name]}])
                     entity.save();
-                    res("ok")
+                    res("OK")
                 } else {
                     res("Not enough cash")
                 }   
@@ -301,7 +301,7 @@ function sellProducts(nick, name, quantity) {
                 let found = false;
                 for(let i = 0; i < entity.inventory.products.length; i++) {
                     if(entity.inventory.products[i][1].name == name) {
-                        if(Number(entity.inventory.products[i][0]) > Number(quantity)){
+                        if(Number(entity.inventory.products[i][0]) >= Number(quantity)){
                             found = true;
                             val = Number(entity.inventory.products[i][0]) - quantity;
                             product = {...entity.inventory.products[i][1]};
@@ -320,7 +320,7 @@ function sellProducts(nick, name, quantity) {
                         entity.inventory.products.push([Number(val), {...product}])
                     }
                     entity.save();
-                    res("ok")
+                    res("OK")
                 }
             }
         }).catch((err) => {

@@ -42,8 +42,9 @@ function Homepage(props) {
         <Main>
           <div style={{paddingTop: "80px"}}>
             <h1 style={titleStyle}>Happy Harvest</h1>
-            <NavLink to = "/Crops"><button className="greenbutton" style={btnStyle}>Mis cultivos</button></NavLink>
-            <NavLink to = "/Inventory"><button className="greenbutton" style={btnStyle}>Inventario</button></NavLink>
+            <NavLink to = "/Crops"><button type="button" className="greenbutton" style={btnStyle}>Mis cultivos</button></NavLink>
+            <NavLink to = "/Inventory"><button type="button" className="greenbutton" style={btnStyle}>Inventario</button></NavLink>
+            <NavLink to = "/Shop"><button type="button" className="greenbutton" style={btnStyle}>Tienda</button></NavLink>
           </div>
         </Main>
       </div>
