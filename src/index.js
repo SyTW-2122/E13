@@ -138,7 +138,8 @@ app.post("/users", function (req, res) {
                             "currentCash": 1000,
                             "cropBoost": 0,
                             "animalBoost": 0,
-                            "products": []
+                            "products": [],
+                            "seeds": []
                         }
                     }).then(function () {
                         res.send(JSON.stringify({
@@ -169,7 +170,6 @@ app.post("/users", function (req, res) {
 });
 app.post("/users/auth", function (req, res) {
     try {
-        console.log("patata");
         if (!req.body.username || !req.body.password) {
             throw new Error("User request must have username and password fields");
         }
@@ -206,6 +206,42 @@ app.post("/users/auth", function (req, res) {
             type: "err",
             msg: "Request not valid: " + err
         }));
+    }
+});
+app.post("/users/:user/Crops", authenticate, function (req, res) {
+    if (req.params.user === req.body.authinfo.username) {
+        userUtilities.growCrops(req.params.user, req.query.type).then(function (msg) {
+            res.status(200).send(JSON.stringify({
+                type: "res",
+                msg: msg
+            }));
+        })["catch"](function (err) {
+            res.status(400).send(err);
+        });
+    }
+    else {
+        res.send({
+            type: "err",
+            msg: "User ".concat(req.body.authinfo.username, " cant access this resource")
+        });
+    }
+});
+app.get("/users/:user/Crops", authenticate, function (req, res) {
+    if (req.params.user === req.body.authinfo.username) {
+        userUtilities.harvestCrops(req.params.user, req.query.position).then(function (msg) {
+            res.status(200).send(JSON.stringify({
+                type: "res",
+                msg: msg
+            }));
+        })["catch"](function (err) {
+            res.status(400).send(err);
+        });
+    }
+    else {
+        res.send({
+            type: "err",
+            msg: "User ".concat(req.body.authinfo.username, " cant access this resource")
+        });
     }
 });
 app.get("/users/:user", authenticate, function (req, res) {
@@ -266,6 +302,27 @@ app.get("/testing/validateUser", function (req, res) {
 });
 app.get("/testing/returnCleanUser", function (req, res) {
     userUtilities.returnCleanUser(req.query.username).then(function (list) {
+        res.status(200).send(list);
+    })["catch"](function (err) {
+        res.status(400).send(err);
+    });
+});
+app.post("/testing/addSeeds", function (req, res) {
+    userUtilities.addSeeds(req.query.username, req.query.name, req.query.quantity).then(function (list) {
+        res.status(200).send(list);
+    })["catch"](function (err) {
+        res.status(400).send(err);
+    });
+});
+app.post("/testing/harvestCrops", function (req, res) {
+    userUtilities.harvestCrops(req.query.username, req.query.pos).then(function (list) {
+        res.status(200).send(list);
+    })["catch"](function (err) {
+        res.status(400).send(err);
+    });
+});
+app.post("/testing/cleanAll", function (req, res) {
+    userUtilities.cleanAll(req.query.username).then(function (list) {
         res.status(200).send(list);
     })["catch"](function (err) {
         res.status(400).send(err);

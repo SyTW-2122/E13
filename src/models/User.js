@@ -9,68 +9,15 @@ const UserSchema = new mongoose.Schema({
     farmElements : {
    	    cropSpaces : Number,
    	    animalSpaces : Number,
-   	    currentCrops : [{ 
-            element : String,
-            type : String,
-            cycleTime : Number, //Número de horas
-            lastProduction : Date,
-            baseProduction : Number,
-            probability : Number,
-            product : {
-                name : String,
-                icon : {
-                    src : String,
-                    width : Number,
-                    height : Number
-                },
-                sellPrice : Number
-            },
-            icon : {
-                src : String,
-                width : Number,
-                height : Number
-            },
-            buyPrice : Number,
-            isBoosted : Boolean
-        }],
-   	    currentAnimals : [{ 
-            element : String,
-            type : String,
-            cycleTime : Number, //Número de horas
-            lastProduction : Date,
-            baseProduction : Number,
-            probability : Number,
-            product : {
-                name : String,
-                icon : {
-                    src : String,
-                    width : Number,
-                    height : Number
-                },
-                sellPrice : Number
-            },
-            icon : {
-                src : String,
-                width : Number,
-                height : Number
-            },
-            buyPrice : Number,
-            isBoosted : Boolean
-        }],
+   	    currentCrops : Array,
+   	    currentAnimals : Array,
     },
     inventory : {
    	    currentCash : Number,
    	    cropBoost : Number,
    	    animalBoost : Number,
-   	    products : [{
-            name : String,
-            icon : {
-                src : String,
-                width : Number,
-                height : Number
-            },
-            sellPrice : Number
-        }]
+   	    products : Array,
+        seeds : Array
     }
 })
 

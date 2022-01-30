@@ -156,11 +156,14 @@ describe("Testing <FarmElement/> Component", () => {
          cycleTime: 48,
          lastProduction: newDate.getTime(),
          baseProduction: 1,
-         icon: "some.example.url"}} />);
+         icon: {
+            src: "some.example.url",
+            width: 32,
+            height: 32}}} />);
       expect(wrapper.containsMatchingElement(<p>Nombre: Tomate</p>)).to.be.true;
       expect(wrapper.containsMatchingElement(<p>Fecha de cultivo: {String(newDate.getDate()) + "/" + String(newDate.getMonth() + 1) + "/" + String(newDate.getFullYear()) + " " + String(newDate.getHours()) + ":" + String(newDate.getMinutes())}</p>)).to.be.true;         
       expect(wrapper.containsMatchingElement(<p> Fecha de recogida: {String(auxDate.getDate()) + "/" + String(auxDate.getMonth() + 1) + "/" + String(auxDate.getFullYear()) +  " " + String(auxDate.getHours()) + ":" + String(auxDate.getMinutes())}</p>)).to.be.true;
-      expect(wrapper.containsMatchingElement(<img src="some.example.url" alt="" style={{width: "64px", height: "64px"}}></img>)).to.be.true;
+      expect(wrapper.containsMatchingElement(<img src="some.example.url" alt="" style={{width: 32, height: 32}}></img>)).to.be.true;
    }); 
 
    chai.use(chaiEnzyme());

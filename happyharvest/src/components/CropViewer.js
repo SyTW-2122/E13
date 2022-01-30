@@ -19,7 +19,7 @@ export class CropViewer extends React.Component {
         if (this.props.currentUser.farmElements.currentCrops[i]) {
           crops.push(<FarmElement elementInfo = {{...this.props.currentUser.farmElements.currentCrops[i]}} id = {String(i)} key = {String(i)} />);
         } else {
-          crops.push(<FarmElement key = {String(i)} />);
+          crops.push(<FarmElement seeds = {this.props.currentUser.inventory.seeds} key = {String(i)} />);
         }
       }
       console.log(crops)

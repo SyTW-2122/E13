@@ -1,4 +1,5 @@
 let userModule = require("../models/User")
+let Crops = require("./cropList")
 
 function getUsers(){
     return new Promise((res, rej) => {
@@ -40,7 +41,8 @@ function returnCleanUser(nick) {
             "currentCash" : 0,
             "cropBoost" : 0,
             "animalBoost" : 0,
-            "products" : []
+            "products" : [],
+            "seeds" : []
         }
     }
     return new Promise((res, rej) => {
@@ -141,6 +143,140 @@ function deleteOneUser(nick) {
     })
 }
 
+function addSeeds(nick, name, quantity) {
+    return new Promise((res, rej) => {
+        userModule.User.find({username: nick}).then((list) => {
+            if(list.length == 0) {
+                rej("No user found");
+            } else {
+                let entity = list[0];
+                let val = Number(quantity);
+                for(let i = 0; i < entity.inventory.seeds.length; i++) {
+                    if(entity.inventory.seeds[i][1].type == name) {
+                        val += Number(entity.inventory.seeds[i][0])
+                        entity.inventory.seeds.splice(i, 1)
+                    }
+                }
+                
+                entity.inventory.seeds.push([Number(val), {...Crops[name]}])
+                entity.save();
+                res("ok")
+            }
+        }).catch((err) => {
+            console.log("\n\n" + err)
+            rej(err);
+        })
+    })
+}
+
+function growCrops(nick, name) {
+    return new Promise((res, rej) => {
+        userModule.User.find({username: nick}).then((list) => {
+            if(list.length == 0) {
+                rej("No user found");
+            } else {
+                let entity = list[0];
+                if(entity.farmElements.currentCrops.length >= entity.farmElements.cropSpaces) {
+                    res("The garden is full")
+                } else {
+                    let found = false;
+                    for(let i = 0; i < entity.inventory.seeds.length; i++) {
+                        if(entity.inventory.seeds[i][1].type == name) {
+                            found = true;
+                            let aux = {...entity.inventory.seeds[i][1],
+                                lastProduction: new Date().getTime()
+                            };
+                            entity.farmElements.currentCrops.push(aux);
+                            let seedquantity = entity.inventory.seeds[i][0] -= 1;
+                            let crop = {...entity.inventory.seeds[i][1]};
+                            entity.inventory.seeds.splice(i, 1);
+    
+                            if(seedquantity > 0){
+                                entity.inventory.seeds.push([seedquantity, crop])
+                            }
+                        }
+                    }
+    
+                    entity.save();
+                    if(!found) {
+                        res("User has no seeds")
+                    }
+                    res("OK")
+                }
+            }
+        }).catch((err) => {
+            console.log("\n\n" + err)
+            rej(err);
+        })
+    })
+}
+
+function harvestCrops(nick, position) {
+    pos = Number(position);
+    return new Promise((res, rej) => {
+        userModule.User.find({username: nick}).then((list) => {
+            if(list.length == 0) {
+                rej("No user found");
+            } else {
+                let entity = list[0];
+                if(entity.farmElements.currentCrops.length -1 < pos) {
+                    res("There is no crop in that position")
+                } else {
+                    let producedAt = entity.farmElements.currentCrops[pos].lastProduction + (1000*60*60*entity.farmElements.currentCrops[pos].cycleTime);
+                    let rightNow = new Date().getTime();
+                    //console.log(new Date(producedAt).toDateString() + " - " + String(producedAt));
+                    //console.log(new Date(rightNow).toDateString() + " - " + String(rightNow));
+                    if(producedAt <= rightNow) {
+                        let product = {...entity.farmElements.currentCrops[pos].product}
+                        let previousQuantity = 0;
+                        genQuantity = entity.farmElements.currentCrops[pos].baseProduction;
+                        if(Math.random() < entity.farmElements.currentCrops[pos].probability) {
+                            genQuantity = genQuantity + Math.round(Math.random()*genQuantity);
+                        }
+                        entity.farmElements.currentCrops.splice(pos, 1);
+
+                        for(let i = 0; i < entity.inventory.products.length; i++) {
+                            if(entity.inventory.products[i][1].name == product.name) {
+                                previousQuantity = entity.inventory.products[i][0];
+                                entity.inventory.products.splice(i, 1);
+                            }
+                        }
+
+                        entity.inventory.products.push([genQuantity + previousQuantity, {...product}])
+                    } else {
+                        res("Crop is not ready to harvest")
+                    }
+                    entity.save()
+                    res("OK")
+                }
+            }
+        }).catch((err) => {
+            console.log("\n\n" + err)
+            rej(err);
+        })
+    })
+}
+
+function cleanAll(nick) {
+    return new Promise((res, rej) => {
+        userModule.User.find({username: nick}).then((list) => {
+            if(list.length == 0) {
+                rej("No user found");
+            } else {
+                let entity = list[0];
+                entity.farmElements.currentCrops = [];
+                entity.inventory.seeds = [];
+                entity.inventory.products = [];
+                entity.save()
+                res("ok")
+            }
+        }).catch((err) => {
+            console.log("\n\n" + err)
+            rej(err);
+        })
+    })
+}
+
 exports.getUsers = getUsers
 exports.findUserByName = findUserByName
 exports.checkIfValidReg = checkIfValidReg
@@ -148,3 +284,7 @@ exports.postNewUser = postNewUser
 exports.deleteOneUser = deleteOneUser
 exports.validateUser = validateUser
 exports.returnCleanUser = returnCleanUser
+exports.addSeeds = addSeeds
+exports.growCrops = growCrops
+exports.harvestCrops = harvestCrops
+exports.cleanAll = cleanAll

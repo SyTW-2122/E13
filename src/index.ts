@@ -137,7 +137,8 @@ app.post("/users", (req, res) => {
               "currentCash" : 1000,
               "cropBoost" : 0,
               "animalBoost" : 0,
-              "products" : []
+              "products" : [],
+              "seeds" : []
             }
           }).then(() => {
             res.send(JSON.stringify({
@@ -210,6 +211,41 @@ app.post("/users/auth", (req, res) => {
   }
 });
 
+app.post("/users/:user/Crops", authenticate, (req, res) => {
+  if(req.params.user === req.body.authinfo.username) {
+    userUtilities.growCrops(req.params.user, req.query.type).then((msg) => {
+      res.status(200).send(JSON.stringify({
+        type: "res",
+        msg: msg
+      }));
+    }).catch((err) => {
+      res.status(400).send(err);
+    });
+  } else {
+    res.send({
+      type: "err",
+      msg: `User ${req.body.authinfo.username} cant access this resource`
+    });
+  }
+});
+
+app.get("/users/:user/Crops", authenticate, (req, res) => {
+  if(req.params.user === req.body.authinfo.username) {
+    userUtilities.harvestCrops(req.params.user, req.query.position).then((msg) => {
+      res.status(200).send(JSON.stringify({
+        type: "res",
+        msg: msg
+      }));
+    }).catch((err) => {
+      res.status(400).send(err);
+    });
+  } else {
+    res.send({
+      type: "err",
+      msg: `User ${req.body.authinfo.username} cant access this resource`
+    });
+  }
+});
 
 app.get("/users/:user", authenticate, (req, res) => {
   if(req.params.user === req.body.authinfo.username) {
@@ -288,6 +324,29 @@ app.get("/testing/returnCleanUser", (req, res) => {
   });
 });
 
+app.post("/testing/addSeeds", (req, res) => {
+  userUtilities.addSeeds(req.query.username, req.query.name, req.query.quantity).then((list) => {
+    res.status(200).send(list);
+  }).catch((err) => {
+    res.status(400).send(err);
+  });
+});
+
+app.post("/testing/harvestCrops", (req, res) => {
+  userUtilities.harvestCrops(req.query.username, req.query.pos).then((list) => {
+    res.status(200).send(list);
+  }).catch((err) => {
+    res.status(400).send(err);
+  });
+});
+
+app.post("/testing/cleanAll", (req, res) => {
+  userUtilities.cleanAll(req.query.username).then((list) => {
+    res.status(200).send(list);
+  }).catch((err) => {
+    res.status(400).send(err);
+  });
+});
 
 
 app.get("*", (req, res) => {

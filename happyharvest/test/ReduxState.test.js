@@ -37,7 +37,8 @@ describe('Redux store test demonstration', () => {
                     currentCash : 0,
                     cropBoost : 0,
                     animalBoost : 0,
-                    products : []
+                    products : [],
+                    seeds: []
                 } 
             },
             signIn: {
@@ -80,13 +81,14 @@ describe('Redux store test demonstration', () => {
                     cropSpaces : 0,
                     animalSpaces : 0,
                     currentCrops : [],
-                    currentAnimals : [],
+                    currentAnimals : []
                 },  
                 inventory : {
                     currentCash : 0,
                     cropBoost : 0,
                     animalBoost : 0,
-                    products : []
+                    products : [],
+                    seeds : []
                 }
             }));
             expect(store.getState().currentUser.username).to.equal("Test");
@@ -118,7 +120,8 @@ describe('Redux store test demonstration', () => {
                     currentCash : 0,
                     cropBoost : 0,
                     animalBoost : 0,
-                    products : []
+                    products : [],
+                    seeds : []
                 }
             }));
             expect(store.getState().currentUser.username).not.to.equal("");

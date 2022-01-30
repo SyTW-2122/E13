@@ -29,13 +29,13 @@ export class Header extends React.Component {
         };
         
         let notlogged = <nav style= {styles}>
-                <h1 style={{margin: "0px"}}>Welcome to HappyHarvest!</h1>
+                <h1 style={{margin: "0px"}}>¡Bienvenido a HappyHarvest!</h1>
                 <NavLink to="/"><button>Home</button></NavLink>
                 <NavLink to="/signin"><button>Login</button></NavLink>
                 <NavLink to="/signup"><button>Registrarse</button></NavLink>
             </nav>;
         let logged = <nav style= {styles}>
-                <h1 style={{margin: "0px"}}>Welcome to HappyHarvest!</h1>
+                <h1 style={{margin: "0px"}}>¡Bienvenido a HappyHarvest!</h1>
                 <NavLink to="/"><button>Home</button></NavLink>
                 <button type="button" onClick={this.handleClick}>Cerrar sesión</button>
             </nav>;

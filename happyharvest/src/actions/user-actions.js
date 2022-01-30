@@ -19,7 +19,8 @@ export function setUser(user) {
         currentCash : user.inventory.currentCash ? user.inventory.currentCash : 0,
         cropBoost : user.inventory.cropBoost ? user.inventory.cropBoost : 0,
         animalBoost : user.inventory.animalBoost ? user.inventory.animalBoost : 0,
-        products : user.inventory.products ? [...user.inventory.products] : []
+        products : user.inventory.products ? [...user.inventory.products] : [],
+        seeds: user.inventory.seeds ? [...user.inventory.seeds] : []
       }
     }
   });

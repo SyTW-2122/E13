@@ -14,7 +14,8 @@ inventory : {
   currentCash : 0,
   cropBoost : 0,
   animalBoost : 0,
-  products : []
+  products : [],
+  seeds: []
 } }, {type, payload}) {
   switch (type) {
     case SET_USER:
@@ -36,7 +37,8 @@ inventory : {
           currentCash : 0,
           cropBoost : 0,
           animalBoost : 0,
-          products : []
+          products : [],
+          seeds : []
         } 
       });
   

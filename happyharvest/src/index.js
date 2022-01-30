@@ -34,7 +34,8 @@ const store = createStore(allReducers, {
       currentCash : 0,
       cropBoost : 0,
       animalBoost : 0,
-      products : []
+      products : [],
+      seeds: []
     }
   },
   signIn: {
