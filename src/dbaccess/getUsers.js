@@ -169,6 +169,37 @@ function addSeeds(nick, name, quantity) {
     })
 }
 
+function buySeeds(nick, name, quantity) {
+    return new Promise((res, rej) => {
+        userModule.User.find({username: nick}).then((list) => {
+            if(list.length == 0) {
+                rej("No user found");
+            } else {
+                let entity = list[0];
+                if(Number(entity.inventory.currentCash) > Number(Crops[name].buyPrice)*Number(quantity)){
+                    let val = Number(quantity);
+                    entity.inventory.currentCash = Number(entity.inventory.currentCash) - Number(Crops[name].buyPrice)*Number(quantity);
+                    for(let i = 0; i < entity.inventory.seeds.length; i++) {
+                        if(entity.inventory.seeds[i][1].type == name) {
+                            val += Number(entity.inventory.seeds[i][0])
+                            entity.inventory.seeds.splice(i, 1)
+                        }
+                    }
+                    
+                    entity.inventory.seeds.push([Number(val), {...Crops[name]}])
+                    entity.save();
+                    res("ok")
+                } else {
+                    res("Not enough cash")
+                }   
+            }
+        }).catch((err) => {
+            console.log("\n\n" + err)
+            rej(err);
+        })
+    })
+}
+
 function growCrops(nick, name) {
     return new Promise((res, rej) => {
         userModule.User.find({username: nick}).then((list) => {
@@ -257,6 +288,48 @@ function harvestCrops(nick, position) {
     })
 }
 
+function sellProducts(nick, name, quantity) {
+    return new Promise((res, rej) => {
+        userModule.User.find({username: nick}).then((list) => {
+            if(list.length == 0) {
+                rej("No user found");
+            } else {
+                let entity = list[0];
+
+                let val;
+                let product = {}
+                let found = false;
+                for(let i = 0; i < entity.inventory.products.length; i++) {
+                    if(entity.inventory.products[i][1].name == name) {
+                        if(Number(entity.inventory.products[i][0]) > Number(quantity)){
+                            found = true;
+                            val = Number(entity.inventory.products[i][0]) - quantity;
+                            product = {...entity.inventory.products[i][1]};
+                            entity.inventory.products.splice(i, 1);
+                            entity.inventory.currentCash = Number(entity.inventory.currentCash) + Number(product.sellPrice);
+                        } else {
+                            res("User does not have enought products")
+                        }                        
+                    }
+                }
+                
+                if(!found) {
+                    res("User does not have enought products")
+                } else {
+                    if(val > 0){
+                        entity.inventory.products.push([Number(val), {...product}])
+                    }
+                    entity.save();
+                    res("ok")
+                }
+            }
+        }).catch((err) => {
+            console.log("\n\n" + err)
+            rej(err);
+        })
+    })
+}
+
 function cleanAll(nick) {
     return new Promise((res, rej) => {
         userModule.User.find({username: nick}).then((list) => {
@@ -285,6 +358,8 @@ exports.deleteOneUser = deleteOneUser
 exports.validateUser = validateUser
 exports.returnCleanUser = returnCleanUser
 exports.addSeeds = addSeeds
+exports.buySeeds = buySeeds
+exports.sellProducts = sellProducts
 exports.growCrops = growCrops
 exports.harvestCrops = harvestCrops
 exports.cleanAll = cleanAll

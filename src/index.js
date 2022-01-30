@@ -208,6 +208,42 @@ app.post("/users/auth", function (req, res) {
         }));
     }
 });
+app.post("/users/:user/Seeds", authenticate, function (req, res) {
+    if (req.params.user === req.body.authinfo.username) {
+        userUtilities.buySeeds(req.params.user, req.query.name, req.query.quantity).then(function (msg) {
+            res.status(200).send(JSON.stringify({
+                type: "res",
+                msg: msg
+            }));
+        })["catch"](function (err) {
+            res.status(400).send(err);
+        });
+    }
+    else {
+        res.send({
+            type: "err",
+            msg: "User ".concat(req.body.authinfo.username, " cant access this resource")
+        });
+    }
+});
+app.post("/users/:user/Products", authenticate, function (req, res) {
+    if (req.params.user === req.body.authinfo.username) {
+        userUtilities.sellProducts(req.params.user, req.query.name, req.query.quantity).then(function (msg) {
+            res.status(200).send(JSON.stringify({
+                type: "res",
+                msg: msg
+            }));
+        })["catch"](function (err) {
+            res.status(400).send(err);
+        });
+    }
+    else {
+        res.send({
+            type: "err",
+            msg: "User ".concat(req.body.authinfo.username, " cant access this resource")
+        });
+    }
+});
 app.post("/users/:user/Crops", authenticate, function (req, res) {
     if (req.params.user === req.body.authinfo.username) {
         userUtilities.growCrops(req.params.user, req.query.type).then(function (msg) {

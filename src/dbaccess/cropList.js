@@ -70,5 +70,29 @@ module.exports = {
         },
         buyPrice : 16,
         isBoosted : false
+    },
+    Aguacate: {
+        element : "crop",
+        type : "Aguacate",
+        cycleTime : 4, //Número de horas
+        lastProduction : 0,
+        baseProduction : 5,
+        probability : 0.4,
+        product : {
+            name : "Aguacate",
+            icon : {
+                src : "https://static.vecteezy.com/system/resources/thumbnails/000/206/768/small/Avocado_Illustration.jpg",
+                width : 32,
+                height : 32
+            },
+            sellPrice : 150
+        },
+        icon : {
+            src : "https://static.vecteezy.com/system/resources/thumbnails/000/206/768/small/Avocado_Illustration.jpg",
+            width : 32,
+            height : 32
+        },
+        buyPrice : 800,
+        isBoosted : false
     }
 }

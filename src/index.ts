@@ -211,6 +211,42 @@ app.post("/users/auth", (req, res) => {
   }
 });
 
+app.post("/users/:user/Seeds", authenticate, (req, res) => {
+  if(req.params.user === req.body.authinfo.username) {
+    userUtilities.buySeeds(req.params.user, req.query.name, req.query.quantity).then((msg) => {
+      res.status(200).send(JSON.stringify({
+        type: "res",
+        msg: msg
+      }));
+    }).catch((err) => {
+      res.status(400).send(err);
+    });
+  } else {
+    res.send({
+      type: "err",
+      msg: `User ${req.body.authinfo.username} cant access this resource`
+    });
+  }
+});
+
+app.post("/users/:user/Products", authenticate, (req, res) => {
+  if(req.params.user === req.body.authinfo.username) {
+    userUtilities.sellProducts(req.params.user, req.query.name, req.query.quantity).then((msg) => {
+      res.status(200).send(JSON.stringify({
+        type: "res",
+        msg: msg
+      }));
+    }).catch((err) => {
+      res.status(400).send(err);
+    });
+  } else {
+    res.send({
+      type: "err",
+      msg: `User ${req.body.authinfo.username} cant access this resource`
+    });
+  }
+});
+
 app.post("/users/:user/Crops", authenticate, (req, res) => {
   if(req.params.user === req.body.authinfo.username) {
     userUtilities.growCrops(req.params.user, req.query.type).then((msg) => {
@@ -270,6 +306,8 @@ app.get("/users/:user", authenticate, (req, res) => {
     });
   }
 });
+
+
 
 app.get("/ranking", authenticate, (req, res) => {
   res.send({
