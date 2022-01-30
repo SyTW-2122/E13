@@ -131,6 +131,7 @@ export class Shop extends React.Component {
                     <h1>Vender</h1>
                     {elements}
                     <h1>Comprar</h1>
+                    <h2>Saldo: {this.props.currentUser.inventory.currentCash} monedas</h2>
                     {availableSeeds}
                 </div>
             </Main>

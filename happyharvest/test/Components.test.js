@@ -9,9 +9,10 @@ import { LoginForm } from "../src/components/page-elements/LoginForm";
 import { SignUpForm } from "../src/components/page-elements/SignUpForm";
 import { Header } from "../src/components/page-elements/Header";
 import Footer from "../src/components/page-elements/Footer";
-import FarmElement from "../src/components/FarmElement";
+import { FarmElement } from "../src/components/FarmElement";
 import Homepage from "../src/components/Homepage";
 import { CropViewer } from "../src/components/CropViewer";
+import { Inventory } from "../src/components/Inventory";
 
 
 configure({
@@ -163,7 +164,11 @@ describe("Testing <FarmElement/> Component", () => {
       expect(wrapper.containsMatchingElement(<p>Nombre: Tomate</p>)).to.be.true;
       expect(wrapper.containsMatchingElement(<p>Fecha de cultivo: {String(newDate.getDate()) + "/" + String(newDate.getMonth() + 1) + "/" + String(newDate.getFullYear()) + " " + String(newDate.getHours()) + ":" + String(newDate.getMinutes())}</p>)).to.be.true;         
       expect(wrapper.containsMatchingElement(<p> Fecha de recogida: {String(auxDate.getDate()) + "/" + String(auxDate.getMonth() + 1) + "/" + String(auxDate.getFullYear()) +  " " + String(auxDate.getHours()) + ":" + String(auxDate.getMinutes())}</p>)).to.be.true;
-      expect(wrapper.containsMatchingElement(<img src="some.example.url" alt="" style={{width: 32, height: 32}}></img>)).to.be.true;
+      expect(wrapper.containsMatchingElement(<img src="some.example.url" alt="" style={{
+         width: "auto",
+         height: "25vh",
+         marginLeft: "25%"
+     }}></img>)).to.be.true;
    }); 
 
    chai.use(chaiEnzyme());
@@ -185,18 +190,25 @@ describe("Testing <Homepage/> Component", () => {
    chai.use(chaiEnzyme());
 });
 
-describe("Testing <CropViewer/> Component", () => {
-   it("Should show user crops", () => {
-      const wrapper = shallow(<CropViewer currentUser={{
-         username: "test", 
-         farmElements : {
-            "cropSpaces" : 9,
-            "animalSpaces" : 3,
-            "currentCrops" : [],
-            "currentAnimals" : [],
-         },
+describe("Testing <Inventory/> Component", () => {
+   it("Should render according to props", () => {
+      let newDate = new Date();
+      let auxDate = new Date(newDate.getTime() + (1000 * 60 * 60 * 48));
+      const wrapper = shallow(<Inventory currentUser={{
+         username: "test",
+         inventory: {
+            currentCash: 0,
+            cropBoost: 0,
+            animalBoost: 0,
+            products:[],
+            seeds:[]
+         }
       }}/>);
-      expect(wrapper.find("FarmElement").length).to.be.equal(9);
-   });
+      expect(wrapper.containsMatchingElement(<p>Saldo del usuario: 0 monedas</p>)).to.be.true;
+      expect(wrapper.containsMatchingElement(<p>Fertilizante: 0 unidades</p>)).to.be.true;         
+      expect(wrapper.containsMatchingElement(<p>Comida para animales: 0 unidades</p>)).to.be.true;
+      expect(wrapper.containsMatchingElement(<h1>Inventario</h1>)).to.be.true;
+   }); 
+
    chai.use(chaiEnzyme());
 });

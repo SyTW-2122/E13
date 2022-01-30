@@ -22,7 +22,7 @@ export class CropViewer extends React.Component {
           crops.push(<FarmElement seeds = {this.props.currentUser.inventory.seeds} key = {String(i)} />);
         }
       }
-      console.log(crops)
+      
       return <div>
         <Main>
           <div style={{width: "90%", marginLeft: "5%", paddingTop: "20px"}}>

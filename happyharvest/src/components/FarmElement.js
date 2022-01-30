@@ -5,7 +5,7 @@ import { setUser, logOut } from '../actions/user-actions'
 import { withCookies } from "react-cookie";
 import { setToken } from "../actions/auth-actions";
 
-class FarmElement extends React.Component {
+export class FarmElement extends React.Component {
     constructor(props) {
         super(props);
         this.harvestCrop = this.harvestCrop.bind(this);
@@ -128,10 +128,6 @@ class FarmElement extends React.Component {
                             marginLeft: "25%"
                         }}></img>    
                     </div>
-                    
-                    
-
-                    
                 </div>
             )
         } else {
@@ -173,4 +169,4 @@ const mapStateToProps = (state, props) => {
     }, dispatch); 
   }
   
-  export default withCookies(connect(mapStateToProps, mapActionsToProps)(FarmElement));
+  export default (connect(mapStateToProps, mapActionsToProps)(FarmElement));

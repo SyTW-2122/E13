@@ -43,11 +43,11 @@ export class Inventory extends React.Component {
                 <br/>
                 <h1>Inventario</h1>
                 <h2>Elementos básicos</h2>
-                <p>Saldo del usuario: {`${this.props.currentUser.inventory.currentCash}`}</p>
+                <p>Saldo del usuario: {`${this.props.currentUser.inventory.currentCash}`} monedas</p>
                 <p>Fertilizante: {`${this.props.currentUser.inventory.cropBoost}`} unidades</p>
                 <p>Comida para animales: {`${this.props.currentUser.inventory.animalBoost}`} unidades</p>
                 <br/>
-                <h2>Cultivos</h2>
+                <h2>Productos</h2>
                 {elements}
             </div>
         </Main>
