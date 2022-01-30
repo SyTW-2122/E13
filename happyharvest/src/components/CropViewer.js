@@ -25,8 +25,11 @@ export class CropViewer extends React.Component {
       console.log(crops)
       return <div>
         <Main>
-          <NavLink to = "/"><button>Volver</button></NavLink>
-          {crops}
+          <div style={{width: "90%", marginLeft: "5%", paddingTop: "20px"}}>
+            <NavLink to = "/"><button style={{marginBottom: "60px"}}>Volver</button></NavLink>
+            <h1>Zona de cultivo</h1>
+            {crops}
+          </div>
         </Main>
       </div>
     }

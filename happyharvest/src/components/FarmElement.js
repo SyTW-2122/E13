@@ -99,27 +99,39 @@ class FarmElement extends React.Component {
                 readybutton = <button onClick={this.harvestCrop}>Cosechar</button>
             }
             return (
-                <div>
-                    <p>
-                        Nombre: {this.props.elementInfo.type}
-                    </p>
-                    <p>
-                        Fecha de cultivo: {String(auxDate.getDate()) + "/" + String(auxDate.getMonth() + 1) + "/" + String(auxDate.getFullYear()) +
-                        " " + String(auxDate.getHours()) + ":" + String(auxDate.getMinutes())}
-                    </p>
-                    <p>
-                        Fecha de recogida: {
-                            String(auxDate2.getDate()) + "/" + String(auxDate2.getMonth() + 1) + "/" + String(auxDate2.getFullYear()) +
-                            " " + String(auxDate2.getHours()) + ":" + String(auxDate2.getMinutes())
-                            
-                        }
-                    </p>
-                    <img src={this.props.elementInfo.icon.src} alt="" style={{
-                        width: this.props.elementInfo.icon.width,
-                        height: this.props.elementInfo.icon.height
-                    }}></img>
+                <div style = {{width:"100%", minHeight:"30vh", display:"flex", borderTopStyle: "solid", marginBottom: "30px"}}>
+                    <div style = {{width: "50%", 
+                        height:"100px", 
+                        margin: "10px"}}>
+                        <p>
+                            Nombre: {this.props.elementInfo.type}
+                        </p>
+                        <p>
+                            Fecha de cultivo: {String(auxDate.getDate()) + "/" + String(auxDate.getMonth() + 1) + "/" + String(auxDate.getFullYear()) +
+                            " " + String(auxDate.getHours()) + ":" + String(auxDate.getMinutes())}
+                        </p>
+                        <p>
+                            Fecha de recogida: {
+                                String(auxDate2.getDate()) + "/" + String(auxDate2.getMonth() + 1) + "/" + String(auxDate2.getFullYear()) +
+                                " " + String(auxDate2.getHours()) + ":" + String(auxDate2.getMinutes())
+                                
+                            }
+                        </p>    
+                        {readybutton}
+                    </div>
+                    <div style = {{width: "50%", 
+                        height:"100px", 
+                        margin: "10px"}}>
+                        <img src={this.props.elementInfo.icon.src} alt="" style={{
+                            width: "auto",
+                            height: "25vh",
+                            marginLeft: "25%"
+                        }}></img>    
+                    </div>
+                    
+                    
 
-                    {readybutton}
+                    
                 </div>
             )
         } else {
@@ -130,7 +142,7 @@ class FarmElement extends React.Component {
             }
 
             return (
-                <div>
+                <div style = {{width:"100%", minHeight:"10vh", borderTopStyle: "solid", marginBottom: "30px"}}>
                     <p>
                         Espacio disponible para cultivos
                     </p>

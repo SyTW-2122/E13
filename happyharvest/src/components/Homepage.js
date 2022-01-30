@@ -4,6 +4,26 @@ import { NavLink } from "react-router-dom";
 
 
 function Homepage(props) {
+  let btnStyle = {
+    display: "block",
+    width: "40%",
+    marginLeft: "30%",
+    marginBottom: "7vh",
+    fontSize: "1.4em",
+    paddingTop: "10px",
+    paddingBottom: "10px",
+    fontWeight: "bold",
+    color: "white",
+    textShadow: "-2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000",
+    backgroundColor: "#AED581"
+  }
+
+  let titleStyle = {textAlign: "center", 
+    fontSize: "5em", 
+    color: "white",
+    textShadow: "-3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000",
+  }
+
   if(props.props.username === ""){
     return(
       <Main>
@@ -20,8 +40,11 @@ function Homepage(props) {
     return (
       <div>
         <Main>
-          <h1>Happy Harvest</h1>
-          <NavLink to = "/Crops"><button>Mis cultivos</button></NavLink>
+          <div style={{paddingTop: "80px"}}>
+            <h1 style={titleStyle}>Happy Harvest</h1>
+            <NavLink to = "/Crops"><button className="greenbutton" style={btnStyle}>Mis cultivos</button></NavLink>
+            <NavLink to = "/Inventory"><button className="greenbutton" style={btnStyle}>Inventario</button></NavLink>
+          </div>
         </Main>
       </div>
     );

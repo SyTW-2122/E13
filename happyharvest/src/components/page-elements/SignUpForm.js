@@ -103,7 +103,7 @@ export class SignUpForm extends React.Component {
     }
 
     let content = <div>
-        <h1>Registro</h1>
+        <br/>
         <form className="Login">
           <h2>Introduzca sus datos:</h2>
           <input type="text" placeholder="Usuario" name="username" onChange={this.handleChange} />
@@ -114,7 +114,7 @@ export class SignUpForm extends React.Component {
           <input type="password" placeholder="Repetir contraseña" name= "passwordRepeat" onChange={this.handleChange}/>
           <p style={errStyle}>{this.props.signUp.validPassword}</p>
 
-          <button type="button" onClick={this.handleClick}>Registrarme</button>
+          <button type="button" className="greenbutton" onClick={this.handleClick}>Registrarme</button>
           <br></br>
           <p>{this.props.signUp.msg}</p>
         </form>

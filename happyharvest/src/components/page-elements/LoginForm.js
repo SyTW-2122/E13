@@ -62,10 +62,12 @@ export class LoginForm extends React.Component {
   render() {
     return (
       <form className="Login">
-        <h2>Introduzca sus datos:</h2>
+        <h2 style={{
+          color: "white"
+        }}>Introduzca sus datos:</h2>
         <input type="text" placeholder="Usuario" name="username" onChange={this.handleChange}></input>
         <input type="password" placeholder="Contraseña" name= "password" onChange={this.handleChange} onKeyPress={this.handleKeyPress}></input>
-        <button type="button" onClick={this.handleClick}>Enviar</button>
+        <button type="button" className="greenbutton" onClick={this.handleClick}>Enviar</button>
         <br></br>
         <p>{this.props.signIn.msg}</p>
       </form>      

@@ -5,7 +5,7 @@ function Footer() {
         position: "absolute",
         //height: "10%",
         width: "100%",
-        backgroundColor: "green",
+        backgroundColor: "#558B2F",
         color: "white",
         display: "inline"
     };

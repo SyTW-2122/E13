@@ -44,15 +44,21 @@ code {
   width: 60%;
   margin-left: 20%;
   text-align: center;
+  color: white;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
 }
 .Login button {
   display: block;
   margin-top: 20px;
   margin-bottom: 20px;
-  width: 20%;
-  margin-left: 40%; 
+  width: 50%;
+  margin-left: 25%; 
   font-size: 12px;
   text-align: center;
+  font-weight: bold;
+  color: white;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+  background-color: #AED581
 }
 
 .Welcome {
@@ -68,16 +74,44 @@ code {
   margin-right: 10%;
   width: 30%;
   display: inline;
+  font-size: 1.4em;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: bold;
+  color: white;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+  background-color: #AED581;
 }
 
 .Welcome h1 {
   width: 100%;
   text-align: center;
+  font-size: 5em; 
   color: white;
+  text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000
 }
 
 .Welcome p {
   width: 100%;
   text-align: center;
   color: white;
+  font-weight: bold;
+  font-size: 1.5em;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+}
+
+a:hover {
+  text-decoration: none;
+ }
+
+ a {
+  text-decoration: none;
+ }
+
+ .greenbutton:hover {
+  background-color: #558b2f;      
+}
+
+.Welcome button:hover {
+  background-color: #558b2f;      
 }
