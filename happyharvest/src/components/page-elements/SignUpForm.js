@@ -26,7 +26,7 @@ export class SignUpForm extends React.Component {
     
     let validQuery = true;
     let inputregex = /[^a-z0-9]/i;
-    let emailregex = /^([a-z]|[0-9])+@([a-z]|[0-9])+(\.([a-z][a-z])+)+/i;
+    let emailregex = /^([a-z]|\d)+@([a-z]|\d)+(\.([a-z][a-z])+)+/i;
     if(this.props.signUp.username.length <= 5) { 
       this.props.onUpdateSignUpMessage({validUser: "El nombre de usuario debe contener al menos 6 caracteres"});
       validQuery = false;

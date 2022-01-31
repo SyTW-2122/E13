@@ -118,7 +118,7 @@ app.post("/users", (req, res) => {
       throw new Error("User request must have username, email and password fields");
     } else {
       userUtilities.checkIfValidReg(req.body.username, req.body.email).then((v) => {
-        if(v.register == false) {
+        if(!v.register) {
           res.status(400).send(JSON.stringify(v))
         } else {
           userUtilities.postNewUser({

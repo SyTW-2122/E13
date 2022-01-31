@@ -50,7 +50,7 @@ function returnCleanUser(nick) {
             if(list.length == 0) {
                 rej("No user found");
             } else {
-                for(prop in aux) {
+                for(let prop in aux) {
                     aux[prop] = list[0][prop]
                 }
                 res(aux);
@@ -255,12 +255,10 @@ function harvestCrops(nick, position) {
                 } else {
                     let producedAt = entity.farmElements.currentCrops[pos].lastProduction + (1000*60*60*entity.farmElements.currentCrops[pos].cycleTime);
                     let rightNow = new Date().getTime();
-                    //console.log(new Date(producedAt).toDateString() + " - " + String(producedAt));
-                    //console.log(new Date(rightNow).toDateString() + " - " + String(rightNow));
                     if(producedAt <= rightNow) {
                         let product = {...entity.farmElements.currentCrops[pos].product}
                         let previousQuantity = 0;
-                        genQuantity = entity.farmElements.currentCrops[pos].baseProduction;
+                        let genQuantity = entity.farmElements.currentCrops[pos].baseProduction;
                         if(Math.random() < entity.farmElements.currentCrops[pos].probability) {
                             genQuantity = genQuantity + Math.round(Math.random()*genQuantity);
                         }

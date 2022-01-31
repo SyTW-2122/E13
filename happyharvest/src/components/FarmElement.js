@@ -2,8 +2,6 @@ import React from "react";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { setUser, logOut } from '../actions/user-actions'
-import { withCookies } from "react-cookie";
-import { setToken } from "../actions/auth-actions";
 
 export class FarmElement extends React.Component {
     constructor(props) {
