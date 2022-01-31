@@ -42,7 +42,6 @@ export class FarmElement extends React.Component {
                     alert(e.msg)
                 } else {
                     console.log(e)
-                    //throw new Error("Unexpected response")
                 }
             }).catch((e)=> {
                 console.log(e);

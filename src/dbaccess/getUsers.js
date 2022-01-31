@@ -243,7 +243,7 @@ function growCrops(nick, name) {
 }
 
 function harvestCrops(nick, position) {
-    pos = Number(position);
+    let pos = Number(position);
     return new Promise((res, rej) => {
         userModule.User.find({username: nick}).then((list) => {
             if(list.length == 0) {
